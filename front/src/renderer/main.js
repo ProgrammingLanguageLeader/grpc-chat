@@ -7,6 +7,12 @@ import store from './store'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
+
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
+}
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
