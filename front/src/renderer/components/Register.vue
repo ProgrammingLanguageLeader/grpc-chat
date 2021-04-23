@@ -1,57 +1,81 @@
 <template>
-  <div>
-    <h4>Register</h4>
-    <form @submit.prevent="register">
-      <label for="name">Name</label>
-      <div>
-          <input id="name" type="text" v-model="name" required autofocus>
-      </div>
-
-      <label for="email" >E-Mail Address</label>
-      <div>
-          <input id="email" type="email" v-model="email" required>
-      </div>
-
-      <label for="password">Password</label>
-      <div>
-          <input id="password" type="password" v-model="password" required>
-      </div>
-
-      <label for="password-confirm">Confirm Password</label>
-      <div>
-          <input id="password-confirm" type="password" v-model="password_confirmation" required>
-      </div>
-
-      <div>
-          <button type="submit">Register</button>
-      </div>
-    </form>
-  </div>
+ <div class="auth-form-wrapper">
+   <form class="login auth-form" @submit.prevent="register">
+     <div class="control">
+       <h1>Регистрация</h1>
+     </div>
+     <div class="control block-cube block-input">
+       <input required v-model="name" type="text" placeholder="ФИО"/>
+       <div class="bg-top"><div class="bg-inner"></div></div>
+       <div class="bg-right"><div class="bg-inner"></div></div>
+       <div class="bg"><div class="bg-inner"></div></div>
+     </div>
+     <div class="control block-cube block-input">
+       <input required v-model="login" type="text" placeholder="Логин"/>
+       <div class="bg-top"><div class="bg-inner"></div></div>
+       <div class="bg-right"><div class="bg-inner"></div></div>
+       <div class="bg"><div class="bg-inner"></div></div>
+     </div>
+     <div class="control block-cube block-input">
+       <input required v-model="password" type="password" placeholder="Пароль"/>
+       <div class="bg-top"><div class="bg-inner"></div></div>
+       <div class="bg-right"><div class="bg-inner"></div></div>
+       <div class="bg"><div class="bg-inner"></div></div>
+     </div>
+     <div class="control block-cube block-input">
+       <input required v-model="repeatedPassword" type="password" placeholder="Повторить пароль"/>
+       <div class="bg-top"><div class="bg-inner"></div></div>
+       <div class="bg-right"><div class="bg-inner"></div></div>
+       <div class="bg"><div class="bg-inner"></div></div>
+     </div>
+     <div class="form-error" v-if="'password' in errors">{{errors.password}}</div>
+     <button class="btn block-cube block-cube-hover" type="submit">
+       <span class="bg-top"><span class="bg-inner"></span></span>
+       <span class="bg-right"><span class="bg-inner"></span></span>
+       <span class="bg"><span class="bg-inner"></span></span>
+       <span class="text">Зарегестрироваться</span>
+     </button>
+     <router-link to="/login" class="auth-form-link">Авторизоваться</router-link>
+   </form>
+ </div>
 </template>
 
 <script>
   export default {
     data () {
       return {
+        errors: [],
+        login: '',
         name: '',
-        email: '',
         password: '',
-        password_confirmation: '',
-        is_admin: null
+        repeatedPassword: ''
       }
     },
     methods: {
       register () {
-        let data = {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          is_admin: this.is_admin
+        let login = this.login
+        let name = this.name
+        let password = this.password
+        let repeatedPassword = this.repeatedPassword
+
+        this.errors = []
+
+        if (repeatedPassword !== password) {
+          this.errors['password'] = 'Пароли не совпадают'
+          return
         }
-        this.$store.dispatch('register', data)
+
+        this.$store.dispatch('register', { login, name, password })
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))
       }
     }
   }
 </script>
+
+<style lang="scss">
+  @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+  @import "src/renderer/styles/layout";
+  @import "src/renderer/styles/auth";
+</style>

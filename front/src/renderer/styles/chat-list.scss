@@ -32,8 +32,7 @@
       width: 50px;
       margin-left: auto;
       .unreaded-count {
-        margin: 0 auto;
-        margin-top: 3px;
+        margin: 5px auto 0;
         width: 25px;
         height: 25px;
         background-color: #498dc2;
@@ -41,11 +40,11 @@
         text-align: center;
         color: white;
         font-size: 12px;
-        padding: 4px;
+        padding: 6px 0;
       }
       .time {
         color: #aaa;
-        font-size: 14px;
+        font-size: 12px;
         width: 35px;
         margin: 0 auto;
       }

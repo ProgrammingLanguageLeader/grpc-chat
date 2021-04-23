@@ -146,3 +146,20 @@ h1 {
     }
   }
 }
+.auth-form-link {
+  color: white;
+  margin-top: 20px;
+  display: block;
+  text-align: center;
+}
+.form-error {
+  padding-bottom: 20px;
+  color: red;
+  margin-top: -20px;
+  font-size: 15px;
+  font-weight: bold;
+  &-last {
+    margin-top: 0;
+    padding: 0;
+  }
+}

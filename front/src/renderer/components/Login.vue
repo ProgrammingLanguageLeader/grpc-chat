@@ -5,7 +5,7 @@
        <h1>Вход</h1>
      </div>
      <div class="control block-cube block-input">
-       <input required v-model="email" type="text" placeholder="Логин"/>
+       <input required v-model="login" type="text" placeholder="Логин"/>
        <div class="bg-top"><div class="bg-inner"></div></div>
        <div class="bg-right"><div class="bg-inner"></div></div>
        <div class="bg"><div class="bg-inner"></div></div>
@@ -22,6 +22,8 @@
        <span class="bg"><span class="bg-inner"></span></span>
        <span class="text">Войти</span>
      </button>
+     <div class="form-error form-error-last" v-if="'auth' in errors">{{errors.auth}}</div>
+     <router-link to="/register" class="auth-form-link">Зарегистрироваться</router-link>
    </form>
  </div>
 </template>
@@ -30,15 +32,16 @@
   export default {
     data () {
       return {
-        email: '',
+        errors: {'auth': 'Пользователь не найден'},
+        login: '',
         password: ''
       }
     },
     methods: {
       login () {
-        let email = this.email
+        let login = this.login
         let password = this.password
-        this.$store.dispatch('login', { email, password })
+        this.$store.dispatch('login', { login, password })
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))
       }
