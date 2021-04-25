@@ -28,7 +28,7 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
     @Override
     public void register(RegisterRequest request,
                          StreamObserver<RegisterResponse> responseObserver) {
-        log.info("register call start: request={}", request);
+        log.info("register call start: username={}", request.getUsername());
         ChatUser newUser = new ChatUser()
                 .withUsername(request.getUsername())
                 .withPassword(passwordEncoder.encode(request.getPassword()))
@@ -58,7 +58,7 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
                 })
                 .doOnNext(response -> {
                     responseObserver.onNext(response);
-                    log.info("register call end: request={} response={}", request, response);
+                    log.info("register call end: username={} responseStatus={}", request.getUsername(), response.getStatusCode());
                 })
                 .subscribe();
     }

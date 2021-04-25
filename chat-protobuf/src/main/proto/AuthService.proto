@@ -6,9 +6,9 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "common.proto";
 
+// TODO: implement logout and expire token
 service AuthService {
   rpc login(LoginRequest) returns (LoginResponse) {}
-  rpc logout(LogoutRequest) returns (google.protobuf.Empty) {}
   rpc refreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
 }
 
@@ -19,12 +19,8 @@ message LoginRequest {
 
 message LoginResponse {
   StatusCode statusCode = 1;
-  string token = 2;
-  google.protobuf.Timestamp expires = 3;
-}
-
-message LogoutRequest {
-  string token = 1;
+  string statusDescription = 2;
+  string token = 3;
 }
 
 message RefreshTokenRequest {
@@ -33,6 +29,6 @@ message RefreshTokenRequest {
 
 message RefreshTokenResponse {
   StatusCode statusCode = 1;
-  string token = 2;
-  google.protobuf.Timestamp expires = 3;
+  string statusDescription = 2;
+  string token = 3;
 }

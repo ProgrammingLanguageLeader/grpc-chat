@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.miet.example.grpc.chat.settings.JWTSettings;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -24,8 +25,8 @@ public class JWTAdapter {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
+    public Instant getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration).toInstant();
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -41,8 +42,8 @@ public class JWTAdapter {
     }
 
     private boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        Instant expiration = getExpirationDateFromToken(token);
+        return expiration.isBefore(Instant.now());
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -56,7 +57,11 @@ public class JWTAdapter {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        try {
+            final String username = getUsernameFromToken(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }
