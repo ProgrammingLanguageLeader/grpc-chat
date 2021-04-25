@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+enum StatusCode {
+  SUCCESS = 0;
+  ERROR = 1;
+}

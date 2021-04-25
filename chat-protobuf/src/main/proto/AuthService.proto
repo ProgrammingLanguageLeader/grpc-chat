@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "common.proto";
+
+service AuthService {
+  rpc login(LoginRequest) returns (LoginResponse) {}
+  rpc logout(LogoutRequest) returns (google.protobuf.Empty) {}
+  rpc refreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  StatusCode statusCode = 1;
+  string token = 2;
+  google.protobuf.Timestamp expires = 3;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message RefreshTokenRequest {
+  string token = 1;
+}
+
+message RefreshTokenResponse {
+  StatusCode statusCode = 1;
+  string token = 2;
+  google.protobuf.Timestamp expires = 3;
+}
