@@ -6,26 +6,26 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @With
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ChatUser {
+public class Message {
 
     @org.springframework.data.annotation.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+    @ManyToOne
+    private Chat chat;
 
-    @Column(nullable = false)
-    private String password;
+    @ManyToOne
+    private ChatUser sender;
 
-    private String firstName;
-    private String lastName;
-    private String additionalDescription;
+    private String text;
+    private LocalDateTime createdAt;
 }

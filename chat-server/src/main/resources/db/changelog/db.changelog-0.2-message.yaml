@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1619391053337-2
+      author: Dmitry (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: chatPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: chat
+  - changeSet:
+      id: 1619391053337-3
+      author: Dmitry (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: chat_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: members_id
+                  type: BIGINT
+            tableName: chat_members
+  - changeSet:
+      id: 1619391053337-4
+      author: Dmitry (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: messagePK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: text
+                  type: VARCHAR(255)
+              - column:
+                  name: chat_id
+                  type: BIGINT
+              - column:
+                  name: sender_id
+                  type: BIGINT
+            tableName: message
+  - changeSet:
+      id: 1619391053337-5
+      author: Dmitry (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sender_id
+            baseTableName: message
+            constraintName: FK66wmv4noy06ovj0aytlx3wqs3
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: chat_user
+            validate: true
+  - changeSet:
+      id: 1619391053337-6
+      author: Dmitry (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: members_id
+            baseTableName: chat_members
+            constraintName: FK8ccpftscl961a7yxyr0icn5km
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: chat_user
+            validate: true
+  - changeSet:
+      id: 1619391053337-7
+      author: Dmitry (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: chat_id
+            baseTableName: chat_members
+            constraintName: FKcjnigrgwbin0pdph6mdphhp6i
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: chat
+            validate: true
+  - changeSet:
+      id: 1619391053337-8
+      author: Dmitry (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: chat_id
+            baseTableName: message
+            constraintName: FKmejd0ykokrbuekwwgd5a5xt8a
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: chat
+            validate: true
+

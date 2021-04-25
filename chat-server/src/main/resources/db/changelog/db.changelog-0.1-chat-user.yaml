@@ -41,10 +41,4 @@ databaseChangeLog:
             columnNames: username
             constraintName: UC_CHAT_USERUSERNAME_COL
             tableName: chat_user
-  - changeSet:
-      id: 1619347266893-1
-      author: Dmitry (generated)
-      changes:
-        - alterSequence:
-            sequenceName: hibernate_sequence
 
