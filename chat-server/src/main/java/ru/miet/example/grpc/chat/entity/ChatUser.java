@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Entity
 public class ChatUser {
 
+    @org.springframework.data.annotation.Id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
