@@ -1,6 +1,6 @@
 <template>
   <div class="chats-list">
-    <div class="chat-item" :class="{ 'active' : activeChatId === item.chatId }" v-for="item in items">
+    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : activeChatId === item.chatId }" v-for="item in items">
       <div class="group-wrapper">
         <div class="avatar">
           <img v-if="item.sender.img.length > 0" :src="item.sender.img" alt="avatar">
@@ -60,6 +60,11 @@
             message: 'Привет! тут длинное сообщениечтобыпроверитьверстку'
           }
         ]
+      }
+    },
+    methods: {
+      selectChat (chatId) {
+        this.activeChatId = chatId
       }
     }
   }

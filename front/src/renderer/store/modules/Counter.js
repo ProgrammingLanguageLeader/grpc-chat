@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { RegisterRequest } from "../../../grpc/RegisterService_pb.js";
+
 const state = {
   main: 0
 }
@@ -48,18 +50,32 @@ const actions = {
     //     })
     })
   },
-  register ({commit}, user) {
-    return 123
-    // return new Promise((resolve, reject) => {
-    //   alert('asdP')
-    //   commit('auth_request')
-    //   const token = 'asdfghjkl'
-    //   localStorage.setItem('token', token)
-    //   axios.defaults.headers.common['Authorization'] = token
+  register ({commit}, data) {
+
+    return new Promise((resolve, reject) => {
+      const grpc_client = data.client
+      const user = data.user
+
+      commit('auth_request')
+
+      let registerRequest = new RegisterRequest();
+      registerRequest.setFirstname(user.username)
+      registerRequest.setPassword(user.password)
+      registerRequest.setUsername(user.username)
+
+      grpc_client.register(registerRequest, {}, (err, response) => {
+        const token = response.toObject().token;
+        localStorage.setItem('token', token)
+        axios.defaults.headers.common['Authorization'] = token
+        commit('auth_success', token, user)
+        resolve(response.toObject())
+      })
+    })
     //   commit('auth_success', token, user)
     //   resolve({})
-    //
-    //   /*      axios({ url: 'http://localhost:3000/register', data: user, method: 'POST' })
+
+
+    //        axios({ url: 'http://localhost:3000/register', data: user, method: 'POST' })
     //     .then(resp => {
     //       const token = resp.data.token
     //       const user = resp.data.user
@@ -86,7 +102,7 @@ const actions = {
 }
 
 const getters = {
-  isLoggedIn: state => !!state.token,
+  // isLoggedIn: state => !!state.token,
   authStatus: state => state.status
 }
 

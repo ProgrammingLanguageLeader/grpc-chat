@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.18-latest
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+  db:
+    image: postgres:13.2
+    container_name: db
+    environment:
+      - POSTGRES_DB=grpc-chat
+      - POSTGRES_USER=grpc-chat-user
+      - POSTGRES_PASSWORD=grpc-chat-user
+    ports:
+      - "5432:5432"
