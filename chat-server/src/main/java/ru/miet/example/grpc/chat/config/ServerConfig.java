@@ -4,15 +4,15 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import net.devh.boot.grpc.server.serverfactory.GrpcServerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.miet.example.grpc.chat.settings.GRPCSettings;
+import ru.miet.example.grpc.chat.settings.GrpcSettings;
 
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ServerConfig {
-    private final GRPCSettings chatSettings;
+    private final GrpcSettings chatSettings;
 
-    public ServerConfig(GRPCSettings chatSettings) {
+    public ServerConfig(GrpcSettings chatSettings) {
         this.chatSettings = chatSettings;
     }
 

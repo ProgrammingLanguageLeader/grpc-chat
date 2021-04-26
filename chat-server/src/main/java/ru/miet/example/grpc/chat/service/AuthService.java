@@ -6,12 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
-import ru.miet.example.grpc.chat.jwt.JWTAdapter;
+import ru.miet.example.grpc.chat.jwt.JwtAdapter;
+import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.LoginRequest;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.LoginResponse;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenRequest;
-
-import java.util.Objects;
 
 import static ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenResponse;
 
@@ -28,7 +27,8 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
 
     private final ChatUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-    private final JWTAdapter jwtAdapter;
+    private final JwtAdapter jwtAdapter;
+    private final JwtAuthFacade jwtAuthFacade;
 
     @Override
     public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
@@ -60,17 +60,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     public void refreshToken(RefreshTokenRequest request, StreamObserver<RefreshTokenResponse> responseObserver) {
         log.info("refreshToken start: requestToken={}", request.getToken());
-        Mono.just(request.getToken())
-                .flatMap(token -> {
-                    try {
-                        return Mono.just(jwtAdapter.getUsernameFromToken(request.getToken()));
-                    } catch (RuntimeException e) {
-                        return Mono.empty();
-                    }
-                })
-                .filter(Objects::nonNull)
-                .flatMap(userDetailsService::findByUsername)
-                .filter(userDetails -> jwtAdapter.validateToken(request.getToken(), userDetails))
+        jwtAuthFacade.isUserAuthenticated(request.getToken())
                 .map(userDetails -> {
                     String token = jwtAdapter.generateToken(userDetails);
                     return RefreshTokenResponse.newBuilder()
@@ -78,7 +68,6 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                             .setToken(token)
                             .build();
                 })
-                .switchIfEmpty(Mono.error(new AuthServiceException("token is not valid")))
                 .onErrorResume(throwable -> {
                     log.error("refreshToken error: ", throwable);
                     return Mono.just(RefreshTokenResponse.newBuilder()

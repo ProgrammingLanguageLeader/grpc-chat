@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class JWTSettings {
+public class JwtSettings {
     @Value("${chat.jwt.token-validity-time:3600}")
     public long tokenValidityTime;
 

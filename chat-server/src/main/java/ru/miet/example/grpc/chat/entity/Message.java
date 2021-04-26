@@ -20,12 +20,15 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private Chat chat;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private ChatUser sender;
 
+    @Column(nullable = false)
     private String text;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 }

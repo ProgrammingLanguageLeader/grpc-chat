@@ -8,12 +8,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class ChatProperties {
-    private GRPCProperties grpc;
-    private JWTProperties jwt;
+    private GrpcProperties grpc;
+    private JwtProperties jwt;
 
     @Getter
     @Setter
-    public static class GRPCProperties {
+    public static class GrpcProperties {
         // keep alive time in seconds
         private int keepAliveTime = 30;
 
@@ -23,7 +23,7 @@ public class ChatProperties {
 
     @Getter
     @Setter
-    public static class JWTProperties {
+    public static class JwtProperties {
         // secret key for JWT generation
         private String secret;
 

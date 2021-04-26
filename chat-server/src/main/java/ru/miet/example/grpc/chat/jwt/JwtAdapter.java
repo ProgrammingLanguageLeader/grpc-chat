@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import ru.miet.example.grpc.chat.settings.JWTSettings;
+import ru.miet.example.grpc.chat.settings.JwtSettings;
 
 import java.time.Instant;
 import java.util.Date;
@@ -13,11 +13,11 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 @Component
-public class JWTAdapter {
+public class JwtAdapter {
 
-    private final JWTSettings jwtSettings;
+    private final JwtSettings jwtSettings;
 
-    public JWTAdapter(JWTSettings jwtSettings) {
+    public JwtAdapter(JwtSettings jwtSettings) {
         this.jwtSettings = jwtSettings;
     }
 

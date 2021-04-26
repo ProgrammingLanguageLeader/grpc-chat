@@ -17,6 +17,10 @@ public class ChatUserDetailsService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
+        return findByUsernameExt(username).cast(UserDetails.class);
+    }
+
+    public Mono<ChatUserDetails> findByUsernameExt(String username) {
         return userRepository.findByUsername(username)
                 .map(ChatUserDetails::new);
     }
