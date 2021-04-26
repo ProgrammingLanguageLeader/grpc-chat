@@ -1,24 +1,15 @@
 package ru.miet.example.grpc.chat;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.miet.example.grpc.chat.service.impl.HelloServiceImpl;
-
-import java.io.IOException;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan("ru.miet.example.grpc.chat.props")
+@EnableR2dbcRepositories("ru.miet.example.grpc.chat.repo")
 public class ChatServer {
-
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
         SpringApplication.run(ChatServer.class, args);
-        Server server = ServerBuilder
-                .forPort(8080)
-                .addService(new HelloServiceImpl())
-                .build();
-        server.start();
-        server.awaitTermination();
     }
-
 }

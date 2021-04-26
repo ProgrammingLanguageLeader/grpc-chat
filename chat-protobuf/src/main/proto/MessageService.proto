@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "google/protobuf/timestamp.proto";
+
+import "common.proto";
+
+service MessageService {
+  rpc send(SendMessageRequest) returns (SendMessageResponse) {}
+  rpc get(GetMessageRequest) returns (GetMessageResponse) {}
+}
+
+message Message {
+  uint64 id = 1;
+  uint64 chatId = 2;
+  uint64 senderId = 3;
+  string text = 4;
+  google.protobuf.Timestamp createdTime = 5;
+}
+
+message SendMessageRequest {
+  string token = 1;
+  string text = 2;
+  uint64 chatId = 3;
+  uint64 recipientId = 4;
+}
+
+message SendMessageResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+}
+
+message GetMessageRequest {
+  string token = 1;
+  uint64 chatId = 2;
+  PageParams pageParams = 3;
+}
+
+message GetMessageResponse {
+  uint64 chatId = 1;
+  PageParams pageParams = 2;
+  repeated Message messages = 3;
+}

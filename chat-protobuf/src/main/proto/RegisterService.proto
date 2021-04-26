@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "common.proto";
+
+service RegisterService {
+  rpc register(RegisterRequest) returns (RegisterResponse) {}
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string additionalDescription = 5;
+}
+
+message RegisterResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+}

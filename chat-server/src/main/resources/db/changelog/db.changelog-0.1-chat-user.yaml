@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1619347266893-2
+      author: Dmitry (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: chat_userPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: additional_description
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(255)
+            tableName: chat_user
+  - changeSet:
+      id: 1619347266893-3
+      author: Dmitry (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: UC_CHAT_USERUSERNAME_COL
+            tableName: chat_user
+

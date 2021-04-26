@@ -6,8 +6,6 @@
     <modules>
         <module>chat-protobuf</module>
         <module>chat-server</module>
-        <module>chat-bom</module>
-        <module>chat-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
