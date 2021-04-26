@@ -1,0 +1,1 @@
+./grpcurl --plaintext -d '{"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkbV9zaG9yb2tob3YiLCJleHAiOjE2MTk0MDQzNTcsImlhdCI6MTYxOTQwMDc1N30.dn1WCxNVUF60c2lRdeJvVhufJ1XClxoeAh9AqmZVUud3y22DfjpoMekuTHEXUdtjeO85niggDQKzQZg5EHwa6A", "text": "Тестовое сообщение", "recipientId": "1"}' localhost:8080 ru.miet.example.grpc.chat.service.MessageService/send
