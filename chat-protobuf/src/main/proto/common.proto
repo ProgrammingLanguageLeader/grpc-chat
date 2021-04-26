@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+enum StatusCode {
+  SUCCESS = 0;
+  ERROR = 1;
+}
+
+message PageParams {
+  uint64 offset = 1;
+  uint64 size = 2;
+}
+
+message User {
+  uint64 id = 1;
+  string username = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string avatarUrl = 5;
+}
