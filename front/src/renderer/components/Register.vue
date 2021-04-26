@@ -54,7 +54,7 @@
     methods: {
       register () {
         let login = this.login
-        let name = this.name
+        // let name = this.name
         let password = this.password
         let repeatedPassword = this.repeatedPassword
 
@@ -65,7 +65,8 @@
           return
         }
 
-        this.$store.dispatch('register', { login, name, password })
+        console.log(this.$store.dispatch('login'))
+        this.$store.dispatch('register', { login })
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))
       }
