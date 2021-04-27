@@ -2,9 +2,10 @@ version: "3.9"
 
 services:
   envoy:
-    image: envoyproxy/envoy:v1.18-latest
+    image: envoyproxy/envoy:v1.15-latest
     ports:
-      - "10000:10000"
+      - "8090:8090"
+      - "9901:9901"
     volumes:
       - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
   db:

@@ -64,6 +64,7 @@ const actions = {
       registerRequest.setUsername(user.username)
 
       grpc_client.register(registerRequest, {}, (err, response) => {
+        console.error(err);
         const token = response.toObject().token;
         localStorage.setItem('token', token)
         axios.defaults.headers.common['Authorization'] = token

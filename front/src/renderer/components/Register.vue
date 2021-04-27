@@ -78,7 +78,7 @@ export default {
     }
   },
   created: function () {
-    this.client = new RegisterServiceClient('http://localhost:8080', null, null)
+    this.client = new RegisterServiceClient('http://localhost:8090', null, null)
   },
   methods: {
     register () {

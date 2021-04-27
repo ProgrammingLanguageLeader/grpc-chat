@@ -7,7 +7,7 @@ static_resources:
   listeners:
   - name: listener_0
     address:
-      socket_address: { address: 0.0.0.0, port_value: 8080 }
+      socket_address: { address: 0.0.0.0, port_value: 8090 }
     filter_chains:
     - filters:
       - name: envoy.filters.network.http_connection_manager
@@ -23,10 +23,8 @@ static_resources:
               routes:
               - match: { prefix: "/" }
                 route:
-                  cluster: echo_service
+                  cluster: chat_backend
                   timeout: 0s
-                  max_stream_duration:
-                    grpc_timeout_header_max: 0s
               cors:
                 allow_origin_string_match:
                 - prefix: "*"
@@ -39,7 +37,7 @@ static_resources:
           - name: envoy.filters.http.cors
           - name: envoy.filters.http.router
   clusters:
-  - name: echo_service
+  - name: chat_backend
     connect_timeout: 0.25s
     type: logical_dns
     http2_protocol_options: {}
@@ -51,5 +49,5 @@ static_resources:
             - endpoint:
                 address:
                   socket_address:
-                    address: node-server
-                    port_value: 9090
+                    address: 172.17.0.1
+                    port_value: 8080
