@@ -1,0 +1,85 @@
+databaseChangeLog:
+- changeSet:
+    id: 1619546355724-3
+    author: Dmitry (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: chat_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: member_id
+            type: BIGINT
+        tableName: chat_member
+- changeSet:
+    id: 1619546355724-4
+    author: Dmitry (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: member_id
+        baseTableName: chat_member
+        constraintName: FKolxp7ift3rkxxvs67gj0rvn55
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: chat_user
+        validate: true
+- changeSet:
+    id: 1619546355724-5
+    author: Dmitry (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: chat_id
+        baseTableName: chat_member
+        constraintName: FKq3bag9kv2ntqcmkan5xhdeohb
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: chat
+        validate: true
+- changeSet:
+    id: 1619546355724-6
+    author: Dmitry (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: chat_members
+        constraintName: FK8ccpftscl961a7yxyr0icn5km
+- changeSet:
+    id: 1619546355724-7
+    author: Dmitry (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: chat_members
+        constraintName: FKcjnigrgwbin0pdph6mdphhp6i
+- changeSet:
+    id: 1619546355724-8
+    author: Dmitry (generated)
+    changes:
+    - dropTable:
+        tableName: chat_members
+- changeSet:
+    id: 1619546355724-1
+    author: Dmitry (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: timestamp
+        columnName: created_at
+        tableName: message
+        validate: true
+- changeSet:
+    id: 1619546355724-2
+    author: Dmitry (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: text
+        tableName: message
+        validate: true
+

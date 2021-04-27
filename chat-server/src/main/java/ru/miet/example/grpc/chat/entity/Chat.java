@@ -6,13 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "chat")
 public class Chat {
 
     @org.springframework.data.annotation.Id
@@ -22,6 +22,9 @@ public class Chat {
 
     private String name;
 
-    @ManyToMany
-    private List<ChatUser> members;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "chat_member",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id"))
+    private Set<ChatUser> members;
 }

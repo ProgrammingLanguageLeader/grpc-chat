@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/db.changelog-0.1-chat-user.yaml
   - include:
       file: db/changelog/db.changelog-0.2-message.yaml
+  - include:
+      file: db/changelog/db.changelog-0.3-refactoring.yaml
