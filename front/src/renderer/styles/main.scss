@@ -1,0 +1,35 @@
+
+main {
+  display: flex;
+  .left-side {
+    min-height: 100vh;
+    width: 35%;
+    background-color: #17212b;
+    @media screen and (max-width: $small) {
+      display: none;
+    }
+  }
+
+  .right-side {
+    min-height: 100vh;
+    width: 65%;
+    background-color: #232732;
+    @media screen and (max-width: $small) {
+      width: 100%;
+    }
+  }
+}
+
+.chats-list {
+  .chat-item {
+    &.active {
+      background-color: #2d5178;
+    }
+  }
+}
+
+.inline-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

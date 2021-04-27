@@ -1,0 +1,54 @@
+.messages {
+  padding: 5px;
+  height: 100%;
+  transform: rotate(180deg);
+  direction: rtl;
+  &-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+  .message {
+    transform: rotate(180deg);
+    direction: ltr;
+    width: -moz-fit-content;
+    max-width: 600px;
+    width: fit-content;
+    position: relative;
+    margin: 10px 0;
+    word-break: break-all;
+    background-color: #17212b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    &.from-me {
+    margin-left: auto;
+      text-align: right;
+      background-color: #2d5178;
+    }
+    .author {
+      display: flex;
+      .avatar {
+        img {
+          width: 50px;
+          border-radius: 50%;
+        }
+      }
+      .send-info {
+        margin-left: 5px;
+        .time {
+          color: #aaa;
+          font-size: 14px;
+          float: left;
+        }
+      }
+    }
+  }
+}
