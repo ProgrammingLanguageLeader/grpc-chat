@@ -19,7 +19,7 @@ import static ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTok
 @GrpcService
 public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
 
-    public static class AuthServiceException extends RuntimeException {
+    static class AuthServiceException extends RuntimeException {
         AuthServiceException(String message) {
             super(message);
         }
@@ -32,7 +32,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
-        log.info("login start: username={}", request.getUsername());
+        log.debug("login start: username={}", request.getUsername());
         userDetailsService.findByUsername(request.getUsername())
                 .filter(userDetails -> passwordEncoder.matches(request.getPassword(), userDetails.getPassword()))
                 .map(userDetails -> {
@@ -51,15 +51,16 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                             .build());
                 })
                 .doOnNext(response -> {
-                    log.info("login end: username={} responseToken={}", request.getUsername(), response.getToken());
+                    log.debug("login end: username={} responseToken={}", request.getUsername(), response.getToken());
                     responseObserver.onNext(response);
+                    responseObserver.onCompleted();
                 })
                 .subscribe();
     }
 
     @Override
     public void refreshToken(RefreshTokenRequest request, StreamObserver<RefreshTokenResponse> responseObserver) {
-        log.info("refreshToken start: requestToken={}", request.getToken());
+        log.debug("refreshToken start: requestToken={}", request.getToken());
         jwtAuthFacade.isUserAuthenticated(request.getToken())
                 .map(userDetails -> {
                     String token = jwtAdapter.generateToken(userDetails);
@@ -76,8 +77,9 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                             .build());
                 })
                 .doOnNext(response -> {
-                    log.info("refreshToken end: username={} responseToken={}", request.getToken(), response.getToken());
+                    log.debug("refreshToken end: responseToken={}", response.getToken());
                     responseObserver.onNext(response);
+                    responseObserver.onCompleted();
                 })
                 .subscribe();
     }

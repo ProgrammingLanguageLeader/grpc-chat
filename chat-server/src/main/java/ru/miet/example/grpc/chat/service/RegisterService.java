@@ -7,7 +7,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.ChatUser;
-import ru.miet.example.grpc.chat.repo.UserRepository;
+import ru.miet.example.grpc.chat.repo.generic.ChatUserRepository;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterRequest;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterResponse;
 
@@ -16,32 +16,32 @@ import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterRespo
 @GrpcService
 public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase {
 
-    public static class RegisterServiceException extends RuntimeException {
+    static class RegisterServiceException extends RuntimeException {
         RegisterServiceException(String message) {
             super(message);
         }
     }
 
-    private final UserRepository userRepository;
+    private final ChatUserRepository chatUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void register(RegisterRequest request,
                          StreamObserver<RegisterResponse> responseObserver) {
-        log.info("register call start: username={}", request.getUsername());
+        log.debug("register call start: username={}", request.getUsername());
         ChatUser newUser = new ChatUser()
                 .withUsername(request.getUsername())
                 .withPassword(passwordEncoder.encode(request.getPassword()))
                 .withFirstName(request.getFirstName())
                 .withLastName(request.getLastName())
                 .withAdditionalDescription(request.getAdditionalDescription());
-        userRepository.findByUsername(request.getUsername())
+        chatUserRepository.findByUsername(request.getUsername())
                 .defaultIfEmpty(newUser)
                 .flatMap(user -> {
                     if (user.getId() != null) {
                         return Mono.error(new RegisterServiceException("That username is taken. Try another"));
                     }
-                    return userRepository.save(newUser)
+                    return chatUserRepository.save(newUser)
                             .map(createdUser -> {
                                 log.info("user {} registered", createdUser.getUsername());
                                 return RegisterResponse.newBuilder()
@@ -58,7 +58,8 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
                 })
                 .doOnNext(response -> {
                     responseObserver.onNext(response);
-                    log.info("register call end: username={} responseStatus={}", request.getUsername(), response.getStatusCode());
+                    responseObserver.onCompleted();
+                    log.debug("register call end: username={} responseStatus={}", request.getUsername(), response.getStatusCode());
                 })
                 .subscribe();
     }

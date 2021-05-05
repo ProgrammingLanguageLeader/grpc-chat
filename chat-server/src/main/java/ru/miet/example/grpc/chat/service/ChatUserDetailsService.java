@@ -5,14 +5,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.ChatUserDetails;
-import ru.miet.example.grpc.chat.repo.UserRepository;
+import ru.miet.example.grpc.chat.repo.generic.ChatUserRepository;
 
 @Service
 public class ChatUserDetailsService implements ReactiveUserDetailsService {
-    private final UserRepository userRepository;
+    private final ChatUserRepository chatUserRepository;
 
-    public ChatUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public ChatUserDetailsService(ChatUserRepository chatUserRepository) {
+        this.chatUserRepository = chatUserRepository;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ChatUserDetailsService implements ReactiveUserDetailsService {
     }
 
     public Mono<ChatUserDetails> findByUsernameExt(String username) {
-        return userRepository.findByUsername(username)
+        return chatUserRepository.findByUsername(username)
                 .map(ChatUserDetails::new);
     }
 }
