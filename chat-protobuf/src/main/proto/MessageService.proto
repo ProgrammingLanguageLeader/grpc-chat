@@ -7,8 +7,8 @@ import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 service MessageService {
-  rpc send(SendMessageRequest) returns (SendMessageResponse) {}
-  rpc get(GetMessageRequest) returns (GetMessageResponse) {}
+  rpc sendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+  rpc getMessage(GetMessageRequest) returns (GetMessageResponse) {}
 }
 
 message Message {
@@ -29,6 +29,7 @@ message SendMessageRequest {
 message SendMessageResponse {
   StatusCode statusCode = 1;
   string statusDesc = 2;
+  Message message = 3;
 }
 
 message GetMessageRequest {
