@@ -1,4 +1,4 @@
-package ru.miet.example.grpc.chat.service;
+package ru.miet.example.grpc.chat.service.grpc;
 
 import com.google.common.collect.Sets;
 import com.google.protobuf.Timestamp;
@@ -12,10 +12,13 @@ import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.entity.Message;
 import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
 import ru.miet.example.grpc.chat.repo.custom.ChatRepository;
-import ru.miet.example.grpc.chat.repo.generic.ChatUserRepository;
-import ru.miet.example.grpc.chat.repo.generic.MessageRepository;
-import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessageRequest;
-import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessageResponse;
+import ru.miet.example.grpc.chat.repo.custom.MessageRepository;
+import ru.miet.example.grpc.chat.repo.generic.GenericChatUserRepository;
+import ru.miet.example.grpc.chat.service.Common;
+import ru.miet.example.grpc.chat.service.MessageServiceGrpc;
+import ru.miet.example.grpc.chat.service.MessageServiceOuterClass;
+import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesRequest;
+import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesResponse;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageRequest;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageResponse;
 
@@ -37,7 +40,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
     private final JwtAuthFacade jwtAuthFacade;
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
-    private final ChatUserRepository chatUserRepository;
+    private final GenericChatUserRepository chatUserRepository;
 
     @Override
     public void sendMessage(SendMessageRequest request, StreamObserver<SendMessageResponse> responseObserver) {
@@ -99,7 +102,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
     }
 
     @Override
-    public void getMessage(GetMessageRequest request, StreamObserver<GetMessageResponse> responseObserver) {
+    public void getMessages(GetMessagesRequest request, StreamObserver<GetMessagesResponse> responseObserver) {
         log.info("get start: request={}", request);
         responseObserver.onCompleted();
     }

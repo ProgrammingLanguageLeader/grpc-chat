@@ -1,4 +1,4 @@
-package ru.miet.example.grpc.chat.service;
+package ru.miet.example.grpc.chat.service.grpc;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,9 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.ChatUser;
-import ru.miet.example.grpc.chat.repo.generic.ChatUserRepository;
+import ru.miet.example.grpc.chat.repo.generic.GenericChatUserRepository;
+import ru.miet.example.grpc.chat.service.Common;
+import ru.miet.example.grpc.chat.service.RegisterServiceGrpc;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterRequest;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterResponse;
 
@@ -22,7 +24,7 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
         }
     }
 
-    private final ChatUserRepository chatUserRepository;
+    private final GenericChatUserRepository chatUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override

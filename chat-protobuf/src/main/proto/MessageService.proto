@@ -8,7 +8,7 @@ import "common.proto";
 
 service MessageService {
   rpc sendMessage(SendMessageRequest) returns (SendMessageResponse) {}
-  rpc getMessage(GetMessageRequest) returns (GetMessageResponse) {}
+  rpc getMessages(GetMessagesRequest) returns (GetMessagesResponse) {}
 }
 
 message Message {
@@ -32,13 +32,13 @@ message SendMessageResponse {
   Message message = 3;
 }
 
-message GetMessageRequest {
+message GetMessagesRequest {
   string token = 1;
   uint64 chatId = 2;
   PageParams pageParams = 3;
 }
 
-message GetMessageResponse {
+message GetMessagesResponse {
   uint64 chatId = 1;
   PageParams pageParams = 2;
   repeated Message messages = 3;

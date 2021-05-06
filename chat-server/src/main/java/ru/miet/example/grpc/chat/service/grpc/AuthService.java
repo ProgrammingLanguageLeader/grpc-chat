@@ -1,4 +1,4 @@
-package ru.miet.example.grpc.chat.service;
+package ru.miet.example.grpc.chat.service.grpc;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.jwt.JwtAdapter;
 import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
+import ru.miet.example.grpc.chat.service.AuthServiceGrpc;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.LoginRequest;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.LoginResponse;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenRequest;
+import ru.miet.example.grpc.chat.service.ChatUserDetailsService;
+import ru.miet.example.grpc.chat.service.Common;
 
 import static ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenResponse;
 
