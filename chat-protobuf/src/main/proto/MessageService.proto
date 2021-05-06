@@ -40,6 +40,5 @@ message GetMessagesRequest {
 
 message GetMessagesResponse {
   uint64 chatId = 1;
-  PageParams pageParams = 2;
-  repeated Message messages = 3;
+  repeated Message messages = 2;
 }

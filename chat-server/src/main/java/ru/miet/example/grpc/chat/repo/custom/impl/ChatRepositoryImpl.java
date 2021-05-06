@@ -252,6 +252,21 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
 
     @Override
     public Flux<ChatUser> getChatMembers(@NonNull Long chatId, @NonNull Pageable pageable) {
-        return Flux.empty();
+        final String hql = MessageFormat.format("SELECT chat_user.* " +
+                        "FROM chat_user " +
+                        "INNER JOIN chat_member ON chat_user.{0} = chat_member.{1} " +
+                        "WHERE chat_member.{2} = :{2} " +
+                        "OFFSET {3} " +
+                        "LIMIT {4}",
+                ChatUserColumn.ID,
+                ChatMemberColumn.MEMBER_ID,
+                ChatMemberColumn.CHAT_ID,
+                pageable.getOffset(),
+                pageable.getPageSize());
+        return databaseClient.sql(hql)
+                .bind(ChatMemberColumn.CHAT_ID, chatId)
+                .fetch()
+                .all()
+                .map(ChatUserMapper::fromMap);
     }
 }
