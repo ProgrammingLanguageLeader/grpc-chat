@@ -7,23 +7,18 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.ChatUser;
+import ru.miet.example.grpc.chat.exception.ChatException;
 import ru.miet.example.grpc.chat.repo.generic.GenericChatUserRepository;
 import ru.miet.example.grpc.chat.service.Common;
 import ru.miet.example.grpc.chat.service.RegisterServiceGrpc;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterRequest;
 import ru.miet.example.grpc.chat.service.RegisterServiceOuterClass.RegisterResponse;
+import ru.miet.example.grpc.chat.utils.CommonUtils;
 
 @Slf4j
 @AllArgsConstructor
 @GrpcService
 public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase {
-
-    static class RegisterServiceException extends RuntimeException {
-        RegisterServiceException(String message) {
-            super(message);
-        }
-    }
-
     private final GenericChatUserRepository chatUserRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,7 +36,7 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
                 .defaultIfEmpty(newUser)
                 .flatMap(user -> {
                     if (user.getId() != null) {
-                        return Mono.error(new RegisterServiceException("That username is taken. Try another"));
+                        return Mono.error(new ChatException("That username is taken. Try another"));
                     }
                     return chatUserRepository.save(newUser)
                             .map(createdUser -> {
@@ -55,7 +50,7 @@ public class RegisterService extends RegisterServiceGrpc.RegisterServiceImplBase
                     log.error("register error: ", throwable);
                     return Mono.just(RegisterResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.ERROR)
-                            .setStatusDesc(throwable.getMessage())
+                            .setStatusDesc(CommonUtils.getErrorMessage(throwable))
                             .build());
                 })
                 .doOnNext(response -> {

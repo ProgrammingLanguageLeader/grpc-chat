@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -15,6 +16,7 @@ import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.entity.column.ChatColumn;
 import ru.miet.example.grpc.chat.entity.column.ChatMemberColumn;
 import ru.miet.example.grpc.chat.entity.column.ChatUserColumn;
+import ru.miet.example.grpc.chat.entity.column.MessageColumn;
 import ru.miet.example.grpc.chat.entity.mapper.ChatMapper;
 import ru.miet.example.grpc.chat.entity.mapper.ChatUserMapper;
 import ru.miet.example.grpc.chat.repo.custom.AbstractCustomRepository;
@@ -186,7 +188,7 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
     }
 
     @Override
-    public Mono<Chat> searchByMemberIds(@NonNull Set<Long> memberIds) {
+    public Mono<Chat> searchByMemberIdsWithoutName(@NonNull Set<Long> memberIds) {
         final String chatIdHql = MessageFormat.format("SELECT chat.{0} " +
                         "FROM chat " +
                         "INNER JOIN chat_member ON chat.{0} = chat_member.{1} " +
@@ -194,13 +196,14 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
                         "SELECT chat.{0} " +
                         "FROM chat " +
                         "INNER JOIN chat_member ON chat.{0} = chat_member.{1} " +
-                        "WHERE chat_member.{2} IN (:{2}) " +
+                        "WHERE chat_member.{2} IN (:{2}) AND chat.{3} IS NULL" +
                         ") " +
                         "GROUP BY chat.{0} " +
-                        "HAVING count(1) = {3}",
+                        "HAVING count(1) = {4}",
                 ChatColumn.ID,
                 ChatMemberColumn.CHAT_ID,
                 ChatMemberColumn.MEMBER_ID,
+                ChatColumn.NAME,
                 memberIds.size());
         DatabaseClient.GenericExecuteSpec executeSpec = databaseClient.sql(chatIdHql);
         if (memberIds.size() == 1) {
@@ -216,5 +219,39 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
                 .first()
                 .map(row -> (Long) row.get(ChatColumn.ID));
         return findById(chatIdMono);
+    }
+
+    @Override
+    public Flux<Chat> searchByMemberId(@NonNull Long memberId, @NonNull Pageable pageable) {
+        final String subQuery = MessageFormat.format("SELECT message.{0} AS chat_id, " +
+                        "max(message.{1}) AS max_created_at " +
+                        "FROM message " +
+                        "GROUP BY message.{0}",
+                MessageColumn.CHAT_ID,
+                MessageColumn.CREATED_AT);
+        final String hql = MessageFormat.format("SELECT chat.* " +
+                        "FROM chat " +
+                        "INNER JOIN chat_member ON chat.{0} = chat_member.{1} " +
+                        "INNER JOIN ({2}) AS chat_max_message_created_at ON chat.{0} = chat_max_message_created_at.chat_id " +
+                        "WHERE chat_member.{3} = :{3} " +
+                        "ORDER BY chat_max_message_created_at.max_created_at DESC " +
+                        "OFFSET {4} " +
+                        "LIMIT {5}",
+                ChatColumn.ID,
+                ChatMemberColumn.CHAT_ID,
+                subQuery,
+                ChatMemberColumn.MEMBER_ID,
+                pageable.getOffset(),
+                pageable.getPageSize());
+        return databaseClient.sql(hql)
+                .bind(ChatMemberColumn.MEMBER_ID, memberId)
+                .fetch()
+                .all()
+                .map(ChatMapper::fromMap);
+    }
+
+    @Override
+    public Flux<ChatUser> getChatMembers(@NonNull Long chatId, @NonNull Pageable pageable) {
+        return Flux.empty();
     }
 }

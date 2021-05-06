@@ -10,7 +10,7 @@ service ChatService {
 
 message Chat {
   uint64 id = 1;
-  uint64 name = 2;
+  string name = 2;
 }
 
 message GetChatsRequest {

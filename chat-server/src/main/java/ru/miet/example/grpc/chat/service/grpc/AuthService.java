@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
+import ru.miet.example.grpc.chat.exception.ChatException;
 import ru.miet.example.grpc.chat.jwt.JwtAdapter;
 import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
 import ru.miet.example.grpc.chat.service.AuthServiceGrpc;
@@ -14,6 +15,7 @@ import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.LoginResponse;
 import ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenRequest;
 import ru.miet.example.grpc.chat.service.ChatUserDetailsService;
 import ru.miet.example.grpc.chat.service.Common;
+import ru.miet.example.grpc.chat.utils.CommonUtils;
 
 import static ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTokenResponse;
 
@@ -21,13 +23,6 @@ import static ru.miet.example.grpc.chat.service.AuthServiceOuterClass.RefreshTok
 @AllArgsConstructor
 @GrpcService
 public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
-
-    static class AuthServiceException extends RuntimeException {
-        AuthServiceException(String message) {
-            super(message);
-        }
-    }
-
     private final ChatUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAdapter jwtAdapter;
@@ -45,12 +40,12 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                             .setToken(token)
                             .build();
                 })
-                .switchIfEmpty(Mono.error(new AuthServiceException("login or password is wrong")))
+                .switchIfEmpty(Mono.error(new ChatException("login or password is wrong")))
                 .onErrorResume(throwable -> {
                     log.error("login error: ", throwable);
                     return Mono.just(LoginResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.ERROR)
-                            .setStatusDescription(throwable.getMessage())
+                            .setStatusDescription(CommonUtils.getErrorMessage(throwable))
                             .build());
                 })
                 .doOnNext(response -> {
@@ -76,7 +71,7 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                     log.error("refreshToken error: ", throwable);
                     return Mono.just(RefreshTokenResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.ERROR)
-                            .setStatusDescription(throwable.getMessage())
+                            .setStatusDescription(CommonUtils.getErrorMessage(throwable))
                             .build());
                 })
                 .doOnNext(response -> {

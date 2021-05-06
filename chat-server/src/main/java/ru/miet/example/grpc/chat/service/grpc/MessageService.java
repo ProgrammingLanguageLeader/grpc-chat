@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.Chat;
 import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.entity.Message;
+import ru.miet.example.grpc.chat.exception.ChatException;
 import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
 import ru.miet.example.grpc.chat.repo.custom.ChatRepository;
 import ru.miet.example.grpc.chat.repo.custom.MessageRepository;
@@ -21,6 +22,7 @@ import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesReq
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesResponse;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageRequest;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageResponse;
+import ru.miet.example.grpc.chat.utils.CommonUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,13 +32,6 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 @GrpcService
 public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
-
-    static class MessageServiceException extends RuntimeException {
-        MessageServiceException(String message) {
-            super(message);
-        }
-    }
-
     private final JwtAuthFacade jwtAuthFacade;
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
@@ -53,14 +48,14 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                         chatMono = chatRepository.findById(request.getChatId());
                     } else if (request.getRecipientId() != 0) {
                         chatMono = chatUserRepository.findById(request.getRecipientId())
-                                .switchIfEmpty(Mono.error(new MessageServiceException("recipientId is not valid")))
+                                .switchIfEmpty(Mono.error(new ChatException("recipientId is not valid")))
                                 .flatMap(recipient -> {
                                     Chat chat = new Chat().withMembers(Sets.newHashSet(sender, recipient));
-                                    return chatRepository.searchByMemberIds(Sets.newHashSet(sender.getId(), request.getRecipientId()))
+                                    return chatRepository.searchByMemberIdsWithoutName(Sets.newHashSet(sender.getId(), request.getRecipientId()))
                                             .switchIfEmpty(chatRepository.save(chat));
                                 });
                     }
-                    chatMono.switchIfEmpty(Mono.error(new MessageServiceException("chatId is not valid")));
+                    chatMono.switchIfEmpty(Mono.error(new ChatException("chatId is not valid")));
                     return Mono.zip(chatMono, Mono.just(sender));
                 })
                 .map(chatRecipient -> new Message()
@@ -90,7 +85,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                     log.error("send error: ", throwable);
                     return Mono.just(SendMessageResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.ERROR)
-                            .setStatusDesc(throwable.getMessage())
+                            .setStatusDesc(CommonUtils.getErrorMessage(throwable))
                             .build());
                 })
                 .doOnNext(response -> {

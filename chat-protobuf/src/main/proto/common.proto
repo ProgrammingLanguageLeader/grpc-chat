@@ -8,8 +8,8 @@ enum StatusCode {
 }
 
 message PageParams {
-  uint64 offset = 1;
-  uint64 size = 2;
+  uint32 number = 1;
+  uint32 size = 2;
 }
 
 message User {
