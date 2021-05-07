@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "common.proto";
+
+service ChatService {
+  rpc getChats(GetChatsRequest) returns (GetChatsResponse) {}
+  rpc getMembers(GetMembersRequest) returns (GetMembersResponse) {}
+}
+
+message Chat {
+  uint64 id = 1;
+  string name = 2;
+}
+
+message GetChatsRequest {
+  string token = 1;
+  PageParams pageParams = 2;
+}
+
+message GetChatsResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+  repeated Chat chats = 3;
+}
+
+message GetMembersRequest {
+  string token = 1;
+  uint64 chatId = 2;
+  PageParams pageParams = 3;
+}
+
+message GetMembersResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+  repeated User members = 3;
+}
