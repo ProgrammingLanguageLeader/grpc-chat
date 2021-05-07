@@ -1,6 +1,11 @@
 package ru.miet.example.grpc.chat.utils;
 
+import com.google.protobuf.Timestamp;
 import ru.miet.example.grpc.chat.exception.ChatException;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class CommonUtils {
     private CommonUtils() throws IllegalAccessException {
@@ -17,5 +22,13 @@ public final class CommonUtils {
             errorMessage = throwable.getMessage();
         }
         return errorMessage;
+    }
+
+    public static Timestamp convertToTimestamp(LocalDateTime localDateTime) {
+        Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
+        return Timestamp.newBuilder()
+                .setSeconds(instant.getEpochSecond())
+                .setNanos(instant.getNano())
+                .build();
     }
 }

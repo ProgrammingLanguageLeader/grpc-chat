@@ -4,14 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.miet.example.grpc.chat.entity.Chat;
+import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.entity.Message;
 import ru.miet.example.grpc.chat.entity.column.ChatColumn;
+import ru.miet.example.grpc.chat.entity.column.ChatUserColumn;
 import ru.miet.example.grpc.chat.entity.column.MessageColumn;
+import ru.miet.example.grpc.chat.entity.mapper.MessageMapper;
 import ru.miet.example.grpc.chat.repo.custom.AbstractCustomRepository;
 import ru.miet.example.grpc.chat.repo.custom.MessageRepository;
 import ru.miet.example.grpc.chat.repo.generic.GenericMessageRepository;
@@ -83,7 +86,45 @@ public class MessageRepositoryImpl extends AbstractCustomRepository<Message, Lon
     }
 
     @Override
-    public Flux<Message> findByChatId(Long chatId, Sort sort, Pageable pageable) {
-        return null;
+    public Flux<Message> findByChatId(Long chatId, Pageable pageable) {
+        String hql = MessageFormat.format("SELECT message.{0}, " +
+                        "message.{1}, " +
+                        "message.{2}, " +
+                        "chat_user.{3} AS chat_user_id, " +
+                        "chat_user.{4} AS chat_user_first_name, " +
+                        "chat_user.{5} AS chat_user_last_name, " +
+                        "chat_user.{6} AS chat_user_username " +
+                        "FROM message " +
+                        "INNER JOIN chat_user ON message.{8} = chat_user.{3} " +
+                        "WHERE message.{7} = :{7} " +
+                        "OFFSET {9} " +
+                        "LIMIT {10}",
+                MessageColumn.ID,
+                MessageColumn.CREATED_AT,
+                MessageColumn.TEXT,
+                ChatUserColumn.ID,
+                ChatUserColumn.FIRST_NAME,
+                ChatUserColumn.LAST_NAME,
+                ChatUserColumn.USERNAME,
+                MessageColumn.CHAT_ID,
+                MessageColumn.SENDER_ID,
+                pageable.getOffset(),
+                pageable.getPageSize());
+        log.info("hql = {}", hql);
+        return databaseClient.sql(hql)
+                .bind(MessageColumn.CHAT_ID, chatId)
+                .fetch()
+                .all()
+                .map(map -> {
+                    Message message = MessageMapper.fromMap(map);
+                    message.setChat(new Chat().withId(chatId));
+                    ChatUser chatUser = new ChatUser();
+                    chatUser.setId((Long) map.get("chat_user_id"));
+                    chatUser.setFirstName((String) map.get("chat_user_first_name"));
+                    chatUser.setLastName((String) map.get("chat_user_last_name"));
+                    chatUser.setUsername((String) map.get("chat_user_username"));
+                    message.setSender(chatUser);
+                    return message;
+                });
     }
 }

@@ -14,7 +14,7 @@ service MessageService {
 message Message {
   uint64 id = 1;
   uint64 chatId = 2;
-  uint64 senderId = 3;
+  User sender = 3;
   string text = 4;
   google.protobuf.Timestamp createdTime = 5;
 }
@@ -39,6 +39,8 @@ message GetMessagesRequest {
 }
 
 message GetMessagesResponse {
-  uint64 chatId = 1;
-  repeated Message messages = 2;
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+  uint64 chatId = 3;
+  repeated Message messages = 4;
 }

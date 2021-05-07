@@ -6,6 +6,8 @@ import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.data.domain.PageRequest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.Chat;
 import ru.miet.example.grpc.chat.entity.ChatUser;
@@ -24,9 +26,7 @@ import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageReq
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageResponse;
 import ru.miet.example.grpc.chat.utils.CommonUtils;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Slf4j
 @AllArgsConstructor
@@ -65,17 +65,20 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                         .withCreatedAt(LocalDateTime.now()))
                 .flatMap(messageRepository::save)
                 .map(message -> {
-                    Instant createdAtInstant = message.getCreatedAt().toInstant(ZoneOffset.UTC);
-                    Timestamp createdAtTimestamp = Timestamp.newBuilder()
-                            .setSeconds(createdAtInstant.getEpochSecond())
-                            .setNanos(createdAtInstant.getNano())
+                    Timestamp createdAtTimestamp = CommonUtils.convertToTimestamp(message.getCreatedAt());
+                    ChatUser messageSender = message.getSender();
+                    Common.User responseSender = Common.User.newBuilder()
+                            .setId(messageSender.getId())
+                            .setUsername(messageSender.getUsername())
+                            .setFirstName(messageSender.getFirstName())
+                            .setLastName(messageSender.getLastName())
                             .build();
                     return SendMessageResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.SUCCESS)
                             .setMessage(MessageServiceOuterClass.Message.newBuilder()
                                     .setId(message.getId())
                                     .setChatId(message.getChat().getId())
-                                    .setSenderId(message.getSender().getId())
+                                    .setSender(responseSender)
                                     .setText(message.getText())
                                     .setCreatedTime(createdAtTimestamp)
                                     .build())
@@ -88,17 +91,56 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                             .setStatusDesc(CommonUtils.getErrorMessage(throwable))
                             .build());
                 })
-                .doOnNext(response -> {
+                .subscribe(response -> {
                     responseObserver.onNext(response);
                     responseObserver.onCompleted();
                     log.debug("send end: response={}", response);
-                })
-                .subscribe();
+                });
     }
 
     @Override
     public void getMessages(GetMessagesRequest request, StreamObserver<GetMessagesResponse> responseObserver) {
-        log.info("get start: request={}", request);
-        responseObserver.onCompleted();
+        log.debug("getMessages start: request={}", request);
+        jwtAuthFacade.isUserAuthenticated(request.getToken())
+                .flatMapMany(senderUserDetails -> {
+                    Common.PageParams pageParams = request.getPageParams();
+                    PageRequest pageRequest = PageRequest.of(pageParams.getNumber(), pageParams.getSize());
+                    return messageRepository.findByChatId(request.getChatId(), pageRequest);
+                })
+                .zipWith(Flux.range(0, Integer.MAX_VALUE))
+                .reduce(GetMessagesResponse.newBuilder()
+                                .setStatusCode(Common.StatusCode.SUCCESS)
+                                .setChatId(request.getChatId()),
+                        (responseBuilder, messageWithIndex) -> {
+                            Message messageEntity = messageWithIndex.getT1();
+                            Integer index = messageWithIndex.getT2();
+                            ChatUser sender = messageEntity.getSender();
+                            MessageServiceOuterClass.Message message = MessageServiceOuterClass.Message.newBuilder()
+                                    .setId(messageEntity.getId())
+                                    .setChatId(messageEntity.getChat().getId())
+                                    .setCreatedTime(CommonUtils.convertToTimestamp(messageEntity.getCreatedAt()))
+                                    .setText(messageEntity.getText())
+                                    .setSender(Common.User.newBuilder()
+                                            .setId(sender.getId())
+                                            .setUsername(sender.getUsername())
+                                            .setFirstName(sender.getFirstName())
+                                            .setLastName(sender.getLastName())
+                                            .build())
+                                    .build();
+                            return responseBuilder.addMessages(index, message);
+                        })
+                .map(GetMessagesResponse.Builder::build)
+                .onErrorResume(throwable -> {
+                    log.error("getMessages error: ", throwable);
+                    return Mono.just(GetMessagesResponse.newBuilder()
+                            .setStatusCode(Common.StatusCode.ERROR)
+                            .setStatusDesc(CommonUtils.getErrorMessage(throwable))
+                            .build());
+                })
+                .subscribe(response -> {
+                    responseObserver.onNext(response);
+                    responseObserver.onCompleted();
+                    log.debug("getMessages end: response={}", response);
+                });
     }
 }
