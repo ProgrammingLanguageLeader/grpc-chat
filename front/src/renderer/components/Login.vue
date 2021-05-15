@@ -5,7 +5,7 @@
        <h1>Вход</h1>
      </div>
      <div class="control block-cube block-input">
-       <input required v-model="login" type="text" placeholder="Логин"/>
+       <input required v-model="username" type="text" placeholder="Логин"/>
        <div class="bg-top"><div class="bg-inner"></div></div>
        <div class="bg-right"><div class="bg-inner"></div></div>
        <div class="bg"><div class="bg-inner"></div></div>
@@ -33,7 +33,7 @@
     data () {
       return {
         errors: {'auth': 'Пользователь не найден'},
-        login: '',
+        username: '',
         password: ''
       }
     },

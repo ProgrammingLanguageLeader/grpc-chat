@@ -10,3 +10,7 @@ npm-debug.log.*
 thumbs.db
 !.gitkeep
 .idea
+chat-win32-x64
+chat-win32-x64_old
+chat-win32-x64_old2
+

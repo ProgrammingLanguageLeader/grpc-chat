@@ -19,13 +19,20 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "dist": "build"
   },
   "build": {
     "productName": "grpc_chat_front",
     "appId": "com.example.grpc-chat",
     "directories": {
       "output": "build"
+    },
+    "appImage": {
+      "systemIntegration": "doNotAsk"
+    },
+    "squirrelWindows": {
+      "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
     },
     "files": [
       "dist/electron/**/*"
@@ -49,6 +56,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "target": "squirrel",
       "icon": "build/icons/icon.ico"
     },
     "linux": {
@@ -57,6 +65,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "electron-builder-squirrel-windows": "^22.11.1",
     "google-protobuf": "^3.15.8",
     "grpc-web": "^1.2.1",
     "vue": "^2.5.16",
@@ -88,6 +97,7 @@
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-packager": "^15.2.0",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",

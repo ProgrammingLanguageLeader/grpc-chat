@@ -10,9 +10,9 @@ const router = new Router({
       path: '/',
       name: 'chat',
       component: require('@/components/Chat').default,
-      meta: {
-        requiresAuth: true
-      }
+      // meta: {
+      //   requiresAuth: true
+      // }
     },
     {
       path: '/login',

@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-### Manen ###
+### Manen ###s
 .mvn
 mvnw
 mvnw.cmd
+
