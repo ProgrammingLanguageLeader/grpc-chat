@@ -7,14 +7,14 @@ import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 service MessageService {
-  rpc send(SendMessageRequest) returns (SendMessageResponse) {}
-  rpc get(GetMessageRequest) returns (GetMessageResponse) {}
+  rpc sendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+  rpc getMessages(GetMessagesRequest) returns (GetMessagesResponse) {}
 }
 
 message Message {
   uint64 id = 1;
   uint64 chatId = 2;
-  uint64 senderId = 3;
+  User sender = 3;
   string text = 4;
   google.protobuf.Timestamp createdTime = 5;
 }
@@ -29,16 +29,18 @@ message SendMessageRequest {
 message SendMessageResponse {
   StatusCode statusCode = 1;
   string statusDesc = 2;
+  Message message = 3;
 }
 
-message GetMessageRequest {
+message GetMessagesRequest {
   string token = 1;
   uint64 chatId = 2;
   PageParams pageParams = 3;
 }
 
-message GetMessageResponse {
-  uint64 chatId = 1;
-  PageParams pageParams = 2;
-  repeated Message messages = 3;
+message GetMessagesResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+  uint64 chatId = 3;
+  repeated Message messages = 4;
 }

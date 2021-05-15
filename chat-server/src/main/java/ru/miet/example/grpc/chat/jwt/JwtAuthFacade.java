@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import ru.miet.example.grpc.chat.entity.ChatUserDetails;
+import ru.miet.example.grpc.chat.exception.ChatException;
 import ru.miet.example.grpc.chat.service.ChatUserDetailsService;
 
 import java.util.Objects;
@@ -13,12 +14,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Component
 public class JwtAuthFacade {
-    public static class JwtAuthFacadeException extends RuntimeException {
-        public JwtAuthFacadeException(String message) {
-            super(message);
-        }
-    }
-
     private final JwtAdapter jwtAdapter;
     private final ChatUserDetailsService chatUserDetailsService;
 
@@ -34,6 +29,6 @@ public class JwtAuthFacade {
                 .filter(Objects::nonNull)
                 .flatMap(chatUserDetailsService::findByUsernameExt)
                 .filter(userDetails -> jwtAdapter.validateToken(checkToken, userDetails))
-                .switchIfEmpty(Mono.error(new JwtAuthFacadeException("token is not valid")));
+                .switchIfEmpty(Mono.error(new ChatException("token is not valid")));
     }
 }

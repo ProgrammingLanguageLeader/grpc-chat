@@ -7,7 +7,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("ru.miet.example.grpc.chat.props")
-@EnableR2dbcRepositories("ru.miet.example.grpc.chat.repo")
+@EnableR2dbcRepositories("ru.miet.example.grpc.chat.repo.generic")
 public class ChatServer {
     public static void main(String[] args) {
         SpringApplication.run(ChatServer.class, args);
