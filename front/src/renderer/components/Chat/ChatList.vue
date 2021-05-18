@@ -1,6 +1,6 @@
 <template>
   <div class="chats-list">
-    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : activeChatId === item.chatId }" v-for="item in items">
+    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : activeChatId === item.chatId }" v-for="item in chats">
       <div class="group-wrapper">
         <div class="avatar">
           <img v-if="item.sender.img.length > 0" :src="item.sender.img" alt="avatar">
@@ -23,48 +23,20 @@
   export default {
     data () {
       return {
-        activeChatId: 2,
-        items: [
-          {
-            chatId: 1,
-            sender: {
-              senderId: 1,
-              name: 'Дмитрий Шорохов',
-              img: ''
-            },
-            time: 1618741265,
-            unreadedCount: 0,
-            message: 'Привет! тут длинное сообщениечтобыпроверитьверстку'
-          },
-          {
-            chatId: 2,
-            name: 'ИВТ-М',
-            sender: {
-              senderId: 2,
-              name: 'Саня',
-              img: ''
-            },
-            time: 1618741265,
-            unreadedCount: 124,
-            message: 'Привет! тут длинное сообщениечтобыпроверитьверстку'
-          },
-          {
-            chatId: 3,
-            sender: {
-              senderId: 2,
-              name: 'Саня',
-              img: ''
-            },
-            time: 1618741265,
-            unreadedCount: 2,
-            message: 'Привет! тут длинное сообщениечтобыпроверитьверстку'
-          }
-        ]
+        activeChatId: null,
+        chats: {}
       }
+    },
+    mounted() {
+      this.$store.dispatch('getChatsList',  (response) => {
+        this.chats = response;
+        this.activeChatId = response.first().id;
+      })
     },
     methods: {
       selectChat (chatId) {
         this.activeChatId = chatId
+        this.$store.dispatch('setActiveChat', { chatId })
       }
     }
   }

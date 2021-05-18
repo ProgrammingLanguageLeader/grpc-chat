@@ -1,27 +1,20 @@
 version: "3.3"
 
 services:
-  envoy:
-    image: envoyproxy/envoy:v1.15-latest
-    ports:
-      - "8090:8090"
-      - "9901:9901"
-    volumes:
-      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+
   db:
     container_name: chat-postgres
     image: postgres:13-alpine
     env_file:
       - chat-postgres.env
     volumes:
-      - chat-postgres-data:/var/lib/postgresql/data/
       - ./docker-config/sql/:/docker-entrypoint-initdb.d/
     ports:
       - "127.0.0.1:5432:5432"
 
   chat-backend:
     container_name: chat-backend
-    image: example-miet-chat-server:0.0.1
+    image: dmshorokhov/example-miet-chat-server:0.0.1
     environment:
       SPRING_R2DBC_URL: r2dbc:postgresql://db:5432/grpc-chat?schema=chat
       GRPC_SERVER_PORT: 7654

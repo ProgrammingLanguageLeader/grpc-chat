@@ -19,3 +19,4 @@ message User {
   string lastName = 4;
   string avatarUrl = 5;
 }
+

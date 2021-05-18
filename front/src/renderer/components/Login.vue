@@ -32,18 +32,27 @@
   export default {
     data () {
       return {
-        errors: {'auth': 'Пользователь не найден'},
+        errors: {},
         username: '',
         password: ''
       }
     },
     methods: {
       login () {
-        let login = this.login
-        let password = this.password
-        this.$store.dispatch('login', { login, password })
-          .then(() => this.$router.push('/'))
-          .catch(err => console.log(err))
+        const username = this.username
+        const password = this.password
+        this.$store.dispatch('login', { username, password })
+          .then(() => {
+            console.log(username)
+            this.$router.push('/')
+          })
+          .catch(err => {
+            if (typeof err === 'string') {
+              this.errors = { 'auth': err };
+            } else {
+              console.error(err)
+            }
+          })
       }
     }
   }

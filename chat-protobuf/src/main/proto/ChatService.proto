@@ -12,6 +12,8 @@ service ChatService {
 message Chat {
   uint64 id = 1;
   string name = 2;
+  Message lastMessage = 3;
+  User lastSender = 4;
 }
 
 message GetChatsRequest {

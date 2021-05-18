@@ -85,8 +85,8 @@ proto.ru.miet.example.grpc.chat.service.MessageServicePromiseClient =
  *   !proto.ru.miet.example.grpc.chat.service.SendMessageRequest,
  *   !proto.ru.miet.example.grpc.chat.service.SendMessageResponse>}
  */
-const methodDescriptor_MessageService_send = new grpc.web.MethodDescriptor(
-  '/ru.miet.example.grpc.chat.service.MessageService/send',
+const methodDescriptor_MessageService_sendMessage = new grpc.web.MethodDescriptor(
+  '/ru.miet.example.grpc.chat.service.MessageService/sendMessage',
   grpc.web.MethodType.UNARY,
   proto.ru.miet.example.grpc.chat.service.SendMessageRequest,
   proto.ru.miet.example.grpc.chat.service.SendMessageResponse,
@@ -107,7 +107,7 @@ const methodDescriptor_MessageService_send = new grpc.web.MethodDescriptor(
  *   !proto.ru.miet.example.grpc.chat.service.SendMessageRequest,
  *   !proto.ru.miet.example.grpc.chat.service.SendMessageResponse>}
  */
-const methodInfo_MessageService_send = new grpc.web.AbstractClientBase.MethodInfo(
+const methodInfo_MessageService_sendMessage = new grpc.web.AbstractClientBase.MethodInfo(
   proto.ru.miet.example.grpc.chat.service.SendMessageResponse,
   /**
    * @param {!proto.ru.miet.example.grpc.chat.service.SendMessageRequest} request
@@ -130,13 +130,13 @@ const methodInfo_MessageService_send = new grpc.web.AbstractClientBase.MethodInf
  * @return {!grpc.web.ClientReadableStream<!proto.ru.miet.example.grpc.chat.service.SendMessageResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.ru.miet.example.grpc.chat.service.MessageServiceClient.prototype.send =
+proto.ru.miet.example.grpc.chat.service.MessageServiceClient.prototype.sendMessage =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.MessageService/send',
+      '/ru.miet.example.grpc.chat.service.MessageService/sendMessage',
       request,
       metadata || {},
-      methodDescriptor_MessageService_send,
+      methodDescriptor_MessageService_sendMessage,
       callback);
 };
 
@@ -149,93 +149,93 @@ proto.ru.miet.example.grpc.chat.service.MessageServiceClient.prototype.send =
  * @return {!Promise<!proto.ru.miet.example.grpc.chat.service.SendMessageResponse>}
  *     Promise that resolves to the response
  */
-proto.ru.miet.example.grpc.chat.service.MessageServicePromiseClient.prototype.send =
+proto.ru.miet.example.grpc.chat.service.MessageServicePromiseClient.prototype.sendMessage =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.MessageService/send',
+      '/ru.miet.example.grpc.chat.service.MessageService/sendMessage',
       request,
       metadata || {},
-      methodDescriptor_MessageService_send);
+      methodDescriptor_MessageService_sendMessage);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.ru.miet.example.grpc.chat.service.GetMessageRequest,
- *   !proto.ru.miet.example.grpc.chat.service.GetMessageResponse>}
+ *   !proto.ru.miet.example.grpc.chat.service.GetMessagesRequest,
+ *   !proto.ru.miet.example.grpc.chat.service.GetMessagesResponse>}
  */
-const methodDescriptor_MessageService_get = new grpc.web.MethodDescriptor(
-  '/ru.miet.example.grpc.chat.service.MessageService/get',
+const methodDescriptor_MessageService_getMessages = new grpc.web.MethodDescriptor(
+  '/ru.miet.example.grpc.chat.service.MessageService/getMessages',
   grpc.web.MethodType.UNARY,
-  proto.ru.miet.example.grpc.chat.service.GetMessageRequest,
-  proto.ru.miet.example.grpc.chat.service.GetMessageResponse,
+  proto.ru.miet.example.grpc.chat.service.GetMessagesRequest,
+  proto.ru.miet.example.grpc.chat.service.GetMessagesResponse,
   /**
-   * @param {!proto.ru.miet.example.grpc.chat.service.GetMessageRequest} request
+   * @param {!proto.ru.miet.example.grpc.chat.service.GetMessagesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ru.miet.example.grpc.chat.service.GetMessageResponse.deserializeBinary
+  proto.ru.miet.example.grpc.chat.service.GetMessagesResponse.deserializeBinary
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.ru.miet.example.grpc.chat.service.GetMessageRequest,
- *   !proto.ru.miet.example.grpc.chat.service.GetMessageResponse>}
+ *   !proto.ru.miet.example.grpc.chat.service.GetMessagesRequest,
+ *   !proto.ru.miet.example.grpc.chat.service.GetMessagesResponse>}
  */
-const methodInfo_MessageService_get = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.ru.miet.example.grpc.chat.service.GetMessageResponse,
+const methodInfo_MessageService_getMessages = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.ru.miet.example.grpc.chat.service.GetMessagesResponse,
   /**
-   * @param {!proto.ru.miet.example.grpc.chat.service.GetMessageRequest} request
+   * @param {!proto.ru.miet.example.grpc.chat.service.GetMessagesRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ru.miet.example.grpc.chat.service.GetMessageResponse.deserializeBinary
+  proto.ru.miet.example.grpc.chat.service.GetMessagesResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.ru.miet.example.grpc.chat.service.GetMessageRequest} request The
+ * @param {!proto.ru.miet.example.grpc.chat.service.GetMessagesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.ru.miet.example.grpc.chat.service.GetMessageResponse)}
+ * @param {function(?grpc.web.Error, ?proto.ru.miet.example.grpc.chat.service.GetMessagesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.ru.miet.example.grpc.chat.service.GetMessageResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.ru.miet.example.grpc.chat.service.GetMessagesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.ru.miet.example.grpc.chat.service.MessageServiceClient.prototype.get =
+proto.ru.miet.example.grpc.chat.service.MessageServiceClient.prototype.getMessages =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.MessageService/get',
+      '/ru.miet.example.grpc.chat.service.MessageService/getMessages',
       request,
       metadata || {},
-      methodDescriptor_MessageService_get,
+      methodDescriptor_MessageService_getMessages,
       callback);
 };
 
 
 /**
- * @param {!proto.ru.miet.example.grpc.chat.service.GetMessageRequest} request The
+ * @param {!proto.ru.miet.example.grpc.chat.service.GetMessagesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.ru.miet.example.grpc.chat.service.GetMessageResponse>}
+ * @return {!Promise<!proto.ru.miet.example.grpc.chat.service.GetMessagesResponse>}
  *     Promise that resolves to the response
  */
-proto.ru.miet.example.grpc.chat.service.MessageServicePromiseClient.prototype.get =
+proto.ru.miet.example.grpc.chat.service.MessageServicePromiseClient.prototype.getMessages =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.MessageService/get',
+      '/ru.miet.example.grpc.chat.service.MessageService/getMessages',
       request,
       metadata || {},
-      methodDescriptor_MessageService_get);
+      methodDescriptor_MessageService_getMessages);
 };
 
 

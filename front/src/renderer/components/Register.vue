@@ -52,7 +52,7 @@
           <div class="bg-inner"></div>
         </div>
       </div>
-      <div class="form-error" v-if="'password' in errors">{{ errors.password }}</div>
+      <div class="form-error" v-if="'register' in errors">{{ errors.register }}</div>
       <button class="btn block-cube block-cube-hover" type="submit">
         <span class="bg-top"><span class="bg-inner"></span></span>
         <span class="bg-right"><span class="bg-inner"></span></span>
@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import {RegisterServiceClient} from '../../grpc/RegisterService_grpc_web_pb'
 
 export default {
   data () {
@@ -77,9 +76,6 @@ export default {
       repeatedPassword: ''
     }
   },
-  created: function () {
-    this.client = new RegisterServiceClient('http://localhost:8090', null, null)
-  },
   methods: {
     register () {
       let login = this.login
@@ -90,7 +86,7 @@ export default {
       this.errors = []
 
       if (repeatedPassword !== password) {
-        this.errors['password'] = 'Пароли не совпадают'
+        this.errors['register'] = 'Пароли не совпадают'
         return
       }
 
@@ -99,8 +95,14 @@ export default {
           password: password,
           name: name
         }})
-          .then(() => this.$router.push('/'))
-          .catch(err => console.log(err))
+        .then(() => this.$router.push('/'))
+        .catch(err => {
+          if (typeof err === 'string') {
+            this.errors = { 'register': err };
+          } else {
+            console.error(err)
+          }
+        })
     }
   }
 }
