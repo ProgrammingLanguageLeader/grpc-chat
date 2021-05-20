@@ -53,7 +53,7 @@ const mutations = {
     state.activeChatId = chatId
   },
   add_message (state, message) {
-    state.messages.push(message)
+    state.messages.push(message)ZZ
   }
 }
 
