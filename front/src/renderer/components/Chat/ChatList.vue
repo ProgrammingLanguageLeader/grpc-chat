@@ -1,6 +1,6 @@
 <template>
   <div class="chats-list">
-    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : activeChatId === item.chatId }" v-for="item in chats">
+    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : this.$store.getters.activeChatId === item.chatId }" v-for="item in chats">
       <div class="group-wrapper">
         <div class="avatar">
           <img v-if="item.sender.img.length > 0" :src="item.sender.img" alt="avatar">
@@ -23,19 +23,16 @@
   export default {
     data () {
       return {
-        activeChatId: null,
         chats: {}
       }
     },
     mounted() {
       this.$store.dispatch('getChatsList',  (response) => {
         this.chats = response;
-        this.activeChatId = response.first().id;
       })
     },
     methods: {
       selectChat (chatId) {
-        this.activeChatId = chatId
         this.$store.dispatch('setActiveChat', { chatId })
       }
     }

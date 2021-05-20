@@ -95,7 +95,7 @@ export default {
           password: password,
           name: name
         }})
-        .then(() => this.$router.push('/'))
+        .then(() => this.$router.push('/login'))
         .catch(err => {
           if (typeof err === 'string') {
             this.errors = { 'register': err };

@@ -20,14 +20,29 @@
       </div>
     </div>
     <div class="send-message">
-      <input type="text" placeholder="Введите сообщение">
-      <span class="fa fa-paper-plane send-message-btn"></span>
+      <input type="text" placeholder="Введите сообщение" v-model="newMessage">
+      <span class="fa fa-paper-plane send-message-btn" v-on:click="sendMessage"></span>
     </div>
   </div>
 </template>
 
 <script>
-  export default {}
+  export default {
+    data() {
+      return {
+        newMessage: ''
+      }
+    },
+    methods: {
+      sendMessage () {
+        const newMessage = this.newMessage
+        this.$store.dispatch('sendMessage', { newMessage })
+          .then(() => {
+            this.newMessage = ''
+          })
+      },
+    }
+  }
 </script>
 
 <style lang="scss">

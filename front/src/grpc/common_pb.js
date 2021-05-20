@@ -92,7 +92,7 @@ proto.ru.miet.example.grpc.chat.service.PageParams.prototype.toObject = function
  */
 proto.ru.miet.example.grpc.chat.service.PageParams.toObject = function(includeInstance, msg) {
   var f, obj = {
-    offset: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    number: jspb.Message.getFieldWithDefault(msg, 1, 0),
     size: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
@@ -131,11 +131,11 @@ proto.ru.miet.example.grpc.chat.service.PageParams.deserializeBinaryFromReader =
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setOffset(value);
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setNumber(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setSize(value);
       break;
     default:
@@ -167,16 +167,16 @@ proto.ru.miet.example.grpc.chat.service.PageParams.prototype.serializeBinary = f
  */
 proto.ru.miet.example.grpc.chat.service.PageParams.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getOffset();
+  f = message.getNumber();
   if (f !== 0) {
-    writer.writeUint64(
+    writer.writeUint32(
       1,
       f
     );
   }
   f = message.getSize();
   if (f !== 0) {
-    writer.writeUint64(
+    writer.writeUint32(
       2,
       f
     );
@@ -185,10 +185,10 @@ proto.ru.miet.example.grpc.chat.service.PageParams.serializeBinaryToWriter = fun
 
 
 /**
- * optional uint64 offset = 1;
+ * optional uint32 number = 1;
  * @return {number}
  */
-proto.ru.miet.example.grpc.chat.service.PageParams.prototype.getOffset = function() {
+proto.ru.miet.example.grpc.chat.service.PageParams.prototype.getNumber = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
@@ -197,13 +197,13 @@ proto.ru.miet.example.grpc.chat.service.PageParams.prototype.getOffset = functio
  * @param {number} value
  * @return {!proto.ru.miet.example.grpc.chat.service.PageParams} returns this
  */
-proto.ru.miet.example.grpc.chat.service.PageParams.prototype.setOffset = function(value) {
+proto.ru.miet.example.grpc.chat.service.PageParams.prototype.setNumber = function(value) {
   return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
 /**
- * optional uint64 size = 2;
+ * optional uint32 size = 2;
  * @return {number}
  */
 proto.ru.miet.example.grpc.chat.service.PageParams.prototype.getSize = function() {
