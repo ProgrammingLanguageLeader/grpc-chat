@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
+import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.exception.ChatException;
 import ru.miet.example.grpc.chat.jwt.JwtAdapter;
 import ru.miet.example.grpc.chat.jwt.JwtAuthFacade;
@@ -31,13 +32,21 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
         log.debug("login start: username={}", request.getUsername());
-        userDetailsService.findByUsername(request.getUsername())
+        userDetailsService.findByUsernameExt(request.getUsername())
                 .filter(userDetails -> passwordEncoder.matches(request.getPassword(), userDetails.getPassword()))
                 .map(userDetails -> {
                     String token = jwtAdapter.generateToken(userDetails);
+                    ChatUser user = userDetails.getUser();
+                    Common.User responseUser = Common.User.newBuilder()
+                            .setId(user.getId())
+                            .setUsername(user.getUsername())
+                            .setFirstName(user.getFirstName())
+                            .setLastName(user.getLastName())
+                            .build();
                     return LoginResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.SUCCESS)
                             .setToken(token)
+                            .setUser(responseUser)
                             .build();
                 })
                 .switchIfEmpty(Mono.error(new ChatException("login or password is wrong")))

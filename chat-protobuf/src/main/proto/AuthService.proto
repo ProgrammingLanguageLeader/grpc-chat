@@ -19,6 +19,7 @@ message LoginResponse {
   StatusCode statusCode = 1;
   string statusDescription = 2;
   string token = 3;
+  User user = 4;
 }
 
 message RefreshTokenRequest {
