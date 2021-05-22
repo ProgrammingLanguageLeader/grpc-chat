@@ -21,15 +21,12 @@
     name: 'chat',
     components: { Messages, AccountInfo, ChatList },
     computed: {
-      isLoggedIn () { return this.$store.getters.isLoggedIn }
+      isLoggedIn () {
+        console.log(this.$store.getters.isLoggedIn);
+        return this.$store.getters.isLoggedIn
+      }
     },
     methods: {
-      logout () {
-        this.$store.dispatch('logout')
-          .then(() => {
-            this.$router.push('/login')
-          })
-      },
       open (link) {
         this.$electron.shell.openExternal(link)
       }

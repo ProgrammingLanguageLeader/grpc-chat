@@ -11,7 +11,7 @@ const router = new Router({
       name: 'chat',
       component: require('@/components/Chat').default,
       meta: {
-        requiresAuth: true
+         requiresAuth: true
       }
     },
     {

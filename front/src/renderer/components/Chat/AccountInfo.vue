@@ -15,7 +15,7 @@
         <div class="config-btn">
           <span class="fa fa-cog"></span>
         </div>
-        <div class="signout-btn">
+        <div class="signout-btn" v-on:click="logout">
           <span class="fa fa-sign-out-alt"></span>
         </div>
       </div>
@@ -36,6 +36,14 @@
         login: 'epimetheus84',
         img: ''
       }
+    },
+    methods: {
+      logout () {
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/login')
+          })
+      },
     }
   }
 </script>
