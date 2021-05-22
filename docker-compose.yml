@@ -8,6 +8,7 @@ services:
     env_file:
       - chat-postgres.env
     volumes:
+      - chat-postgres-data:/var/lib/postgresql/data/
       - ./docker-config/sql/:/docker-entrypoint-initdb.d/
     ports:
       - "127.0.0.1:5432:5432"
