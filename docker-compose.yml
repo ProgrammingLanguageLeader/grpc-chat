@@ -6,7 +6,7 @@ services:
     container_name: chat-postgres
     image: postgres:13-alpine
     env_file:
-      - chat-postgres.env
+      - docker-config/chat-postgres.env
     volumes:
       - chat-postgres-data:/var/lib/postgresql/data/
       - ./docker-config/sql/:/docker-entrypoint-initdb.d/
@@ -22,11 +22,6 @@ services:
       LOGGING_LEVEL_ROOT: DEBUG
     ports:
       - "127.0.0.1:7654:7654"
-
-  # TODO: add migrations
-  #  db-migrations:
-  #    container_name: chat-db-migrations
-  #    image: liquibase/liquibase:4.3
 
   proxy:
     container_name: envoy
