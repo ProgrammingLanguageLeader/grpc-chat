@@ -13,7 +13,8 @@ message RegisterRequest {
   string password = 2;
   string firstName = 3;
   string lastName = 4;
-  string additionalDescription = 5;
+  string avatarUrl = 5;
+  string additionalDescription = 6;
 }
 
 message RegisterResponse {

@@ -18,5 +18,6 @@ message User {
   string firstName = 3;
   string lastName = 4;
   string avatarUrl = 5;
+  string additionalDesc = 6;
 }
 

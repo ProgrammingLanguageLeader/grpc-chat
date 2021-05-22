@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "common.proto";
+
+service EditUserService {
+  rpc edit(EditUserRequest) returns (EditUserResponse) {}
+  rpc changePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {}
+}
+
+message EditUserRequest {
+  string token = 1;
+  string username = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string avatarUrl = 5;
+  string additionalDesc = 6;
+}
+
+message EditUserResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+}
+
+message ChangePasswordRequest {
+  string token = 1;
+  string currentPassword = 2;
+  string newPassword = 3;
+}
+
+message ChangePasswordResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+}
