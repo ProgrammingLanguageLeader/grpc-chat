@@ -77,12 +77,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                                     .setChatId(chat.getId())
                                     .setCreatedTime(CommonUtils.convertToTimestamp(message.getCreatedAt()))
                                     .setText(message.getText())
-                                    .setSender(Common.User.newBuilder()
-                                            .setId(sender.getId())
-                                            .setFirstName(sender.getFirstName())
-                                            .setLastName(sender.getLastName())
-                                            .setUsername(sender.getUsername())
-                                            .build())
+                                    .setSender(CommonUtils.convertToUserMessage(sender))
                                     .build();
                             ChatServiceOuterClass.Chat chatMsg = ChatServiceOuterClass.Chat.newBuilder()
                                     .setId(chat.getId())
@@ -120,12 +115,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                         (responseBuilder, memberWithIndex) -> {
                             ChatUser member = memberWithIndex.getT1();
                             Integer index = memberWithIndex.getT2();
-                            Common.User user = Common.User.newBuilder()
-                                    .setId(member.getId())
-                                    .setUsername(member.getUsername())
-                                    .setFirstName(member.getFirstName())
-                                    .setLastName(member.getLastName())
-                                    .build();
+                            Common.User user = CommonUtils.convertToUserMessage(member);
                             return responseBuilder.addMembers(index, user);
                         })
                 .map(GetMembersResponse.Builder::build)

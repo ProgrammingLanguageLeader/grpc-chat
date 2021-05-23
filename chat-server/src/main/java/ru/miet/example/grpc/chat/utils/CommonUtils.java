@@ -1,7 +1,10 @@
 package ru.miet.example.grpc.chat.utils;
 
 import com.google.protobuf.Timestamp;
+import lombok.NonNull;
+import ru.miet.example.grpc.chat.entity.ChatUser;
 import ru.miet.example.grpc.chat.exception.ChatException;
+import ru.miet.example.grpc.chat.service.Common;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -24,11 +27,20 @@ public final class CommonUtils {
         return errorMessage;
     }
 
-    public static Timestamp convertToTimestamp(LocalDateTime localDateTime) {
+    public static Timestamp convertToTimestamp(@NonNull LocalDateTime localDateTime) {
         Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
         return Timestamp.newBuilder()
                 .setSeconds(instant.getEpochSecond())
                 .setNanos(instant.getNano())
+                .build();
+    }
+
+    public static Common.User convertToUserMessage(@NonNull ChatUser chatUser) {
+        return Common.User.newBuilder()
+                .setId(chatUser.getId())
+                .setUsername(chatUser.getUsername())
+                .setFirstName(chatUser.getFirstName())
+                .setLastName(chatUser.getLastName())
                 .build();
     }
 }

@@ -37,16 +37,10 @@ public class AuthService extends AuthServiceGrpc.AuthServiceImplBase {
                 .map(userDetails -> {
                     String token = jwtAdapter.generateToken(userDetails);
                     ChatUser user = userDetails.getUser();
-                    Common.User responseUser = Common.User.newBuilder()
-                            .setId(user.getId())
-                            .setUsername(user.getUsername())
-                            .setFirstName(user.getFirstName())
-                            .setLastName(user.getLastName())
-                            .build();
                     return LoginResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.SUCCESS)
                             .setToken(token)
-                            .setUser(responseUser)
+                            .setUser(CommonUtils.convertToUserMessage(user))
                             .build();
                 })
                 .switchIfEmpty(Mono.error(new ChatException("login or password is wrong")))
