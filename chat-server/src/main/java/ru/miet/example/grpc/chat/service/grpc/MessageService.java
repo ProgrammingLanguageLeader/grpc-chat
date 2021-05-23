@@ -26,7 +26,6 @@ import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageRes
 import ru.miet.example.grpc.chat.utils.CommonUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @Slf4j
 @AllArgsConstructor
@@ -67,12 +66,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                 .map(message -> {
                     Timestamp createdAtTimestamp = CommonUtils.convertToTimestamp(message.getCreatedAt());
                     ChatUser messageSender = message.getSender();
-                    Common.User responseSender = Common.User.newBuilder()
-                            .setId(messageSender.getId())
-                            .setUsername(messageSender.getUsername())
-                            .setFirstName(messageSender.getFirstName())
-                            .setLastName(messageSender.getLastName())
-                            .build();
+                    Common.User responseSender = CommonUtils.convertToUserMessage(messageSender);
                     return SendMessageResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.SUCCESS)
                             .setMessage(Common.Message.newBuilder()
@@ -120,12 +114,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                                     .setChatId(request.getChatId())
                                     .setCreatedTime(CommonUtils.convertToTimestamp(messageEntity.getCreatedAt()))
                                     .setText(messageEntity.getText())
-                                    .setSender(Common.User.newBuilder()
-                                            .setId(sender.getId())
-                                            .setUsername(sender.getUsername())
-                                            .setFirstName(sender.getFirstName())
-                                            .setLastName(sender.getLastName())
-                                            .build())
+                                    .setSender(CommonUtils.convertToUserMessage(sender))
                                     .build();
                             return responseBuilder.addMessages(index, message);
                         })
