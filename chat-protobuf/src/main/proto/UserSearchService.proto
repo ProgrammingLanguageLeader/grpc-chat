@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package ru.miet.example.grpc.chat.service;
+
+import "common.proto";
+
+service UserSearchService {
+  rpc search(UserSearchRequest) returns (UserSearchResponse) {}
+}
+
+message UserSearchRequest {
+  string token = 1;
+  string username = 2;
+}
+
+message UserSearchResponse {
+  StatusCode statusCode = 1;
+  string statusDesc = 2;
+  repeated User users = 3;
+}
