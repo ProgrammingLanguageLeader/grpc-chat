@@ -189,6 +189,9 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
 
     @Override
     public Mono<Chat> searchByMemberIdsWithoutName(@NonNull Set<Long> memberIds) {
+        String memberIdsString = memberIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(", "));
         final String chatIdHql = MessageFormat.format("SELECT chat.{0} " +
                         "FROM chat " +
                         "INNER JOIN chat_member ON chat.{0} = chat_member.{1} " +
@@ -196,7 +199,7 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
                         "SELECT chat.{0} " +
                         "FROM chat " +
                         "INNER JOIN chat_member ON chat.{0} = chat_member.{1} " +
-                        "WHERE chat_member.{2} IN (:{2}) AND chat.{3} IS NULL" +
+                        "WHERE chat_member.{2} IN ({5}) AND chat.{3} IS NULL" +
                         ") " +
                         "GROUP BY chat.{0} " +
                         "HAVING count(1) = {4}",
@@ -204,18 +207,10 @@ public class ChatRepositoryImpl extends AbstractCustomRepository<Chat, Long> imp
                 ChatMemberColumn.CHAT_ID,
                 ChatMemberColumn.MEMBER_ID,
                 ChatColumn.NAME,
-                memberIds.size());
-        DatabaseClient.GenericExecuteSpec executeSpec = databaseClient.sql(chatIdHql);
-        if (memberIds.size() == 1) {
-            Long singleMemberId = memberIds.stream().findFirst().get();
-            executeSpec = executeSpec.bind(ChatMemberColumn.MEMBER_ID, singleMemberId);
-        } else {
-            String memberIdsString = memberIds.stream()
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(", "));
-            executeSpec = executeSpec.bind(ChatMemberColumn.MEMBER_ID, memberIdsString);
-        }
-        Mono<Long> chatIdMono = executeSpec.fetch()
+                memberIds.size(),
+                memberIdsString);
+        Mono<Long> chatIdMono = databaseClient.sql(chatIdHql)
+                .fetch()
                 .first()
                 .map(row -> (Long) row.get(ChatColumn.ID));
         return findById(chatIdMono);

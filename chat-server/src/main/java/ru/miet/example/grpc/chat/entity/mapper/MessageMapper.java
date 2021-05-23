@@ -1,5 +1,6 @@
 package ru.miet.example.grpc.chat.entity.mapper;
 
+import ru.miet.example.grpc.chat.entity.Chat;
 import ru.miet.example.grpc.chat.entity.Message;
 import ru.miet.example.grpc.chat.entity.column.MessageColumn;
 
@@ -20,6 +21,8 @@ public final class MessageMapper {
                 message.setCreatedAt((LocalDateTime) value);
             } else if (MessageColumn.TEXT.equals(column)) {
                 message.setText((String) value);
+            } else if (MessageColumn.CHAT_ID.equals(column)) {
+                message.setChat(new Chat().withId((Long) value));
             }
         });
         return message;

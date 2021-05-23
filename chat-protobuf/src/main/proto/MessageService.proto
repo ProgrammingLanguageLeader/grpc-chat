@@ -2,21 +2,11 @@ syntax = "proto3";
 
 package ru.miet.example.grpc.chat.service;
 
-import "google/protobuf/timestamp.proto";
-
 import "common.proto";
 
 service MessageService {
   rpc sendMessage(SendMessageRequest) returns (SendMessageResponse) {}
   rpc getMessages(GetMessagesRequest) returns (GetMessagesResponse) {}
-}
-
-message Message {
-  uint64 id = 1;
-  uint64 chatId = 2;
-  User sender = 3;
-  string text = 4;
-  google.protobuf.Timestamp createdTime = 5;
 }
 
 message SendMessageRequest {
