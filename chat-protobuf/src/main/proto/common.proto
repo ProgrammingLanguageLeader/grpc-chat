@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package ru.miet.example.grpc.chat.service;
 
+import "google/protobuf/timestamp.proto";
+
 enum StatusCode {
   SUCCESS = 0;
   ERROR = 1;
@@ -20,3 +22,10 @@ message User {
   string avatarUrl = 5;
 }
 
+message Message {
+  uint64 id = 1;
+  uint64 chatId = 2;
+  User sender = 3;
+  string text = 4;
+  google.protobuf.Timestamp createdTime = 5;
+}

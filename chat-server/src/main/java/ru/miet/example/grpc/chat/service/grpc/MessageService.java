@@ -19,7 +19,6 @@ import ru.miet.example.grpc.chat.repo.custom.MessageRepository;
 import ru.miet.example.grpc.chat.repo.generic.GenericChatUserRepository;
 import ru.miet.example.grpc.chat.service.Common;
 import ru.miet.example.grpc.chat.service.MessageServiceGrpc;
-import ru.miet.example.grpc.chat.service.MessageServiceOuterClass;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesRequest;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.GetMessagesResponse;
 import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageRequest;
@@ -27,6 +26,7 @@ import ru.miet.example.grpc.chat.service.MessageServiceOuterClass.SendMessageRes
 import ru.miet.example.grpc.chat.utils.CommonUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Slf4j
 @AllArgsConstructor
@@ -75,7 +75,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                             .build();
                     return SendMessageResponse.newBuilder()
                             .setStatusCode(Common.StatusCode.SUCCESS)
-                            .setMessage(MessageServiceOuterClass.Message.newBuilder()
+                            .setMessage(Common.Message.newBuilder()
                                     .setId(message.getId())
                                     .setChatId(message.getChat().getId())
                                     .setSender(responseSender)
@@ -115,7 +115,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                             Message messageEntity = messageWithIndex.getT1();
                             Integer index = messageWithIndex.getT2();
                             ChatUser sender = messageEntity.getSender();
-                            MessageServiceOuterClass.Message message = MessageServiceOuterClass.Message.newBuilder()
+                            Common.Message message = Common.Message.newBuilder()
                                     .setId(messageEntity.getId())
                                     .setChatId(messageEntity.getChat().getId())
                                     .setCreatedTime(CommonUtils.convertToTimestamp(messageEntity.getCreatedAt()))
