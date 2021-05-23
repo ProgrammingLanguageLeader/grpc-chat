@@ -117,7 +117,7 @@ public class MessageService extends MessageServiceGrpc.MessageServiceImplBase {
                             ChatUser sender = messageEntity.getSender();
                             Common.Message message = Common.Message.newBuilder()
                                     .setId(messageEntity.getId())
-                                    .setChatId(messageEntity.getChat().getId())
+                                    .setChatId(request.getChatId())
                                     .setCreatedTime(CommonUtils.convertToTimestamp(messageEntity.getCreatedAt()))
                                     .setText(messageEntity.getText())
                                     .setSender(Common.User.newBuilder()
