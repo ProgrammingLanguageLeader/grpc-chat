@@ -23,7 +23,7 @@ proto.ru.miet = {};
 proto.ru.miet.example = {};
 proto.ru.miet.example.grpc = {};
 proto.ru.miet.example.grpc.chat = {};
-proto.ru.miet.example.grpc.chat.service = require('./RegisterService_pb.js');
+proto.ru.miet.example.grpc.chat.service = require('./UserSearchService_pb.js');
 
 /**
  * @param {string} hostname
@@ -33,7 +33,7 @@ proto.ru.miet.example.grpc.chat.service = require('./RegisterService_pb.js');
  * @struct
  * @final
  */
-proto.ru.miet.example.grpc.chat.service.RegisterServiceClient =
+proto.ru.miet.example.grpc.chat.service.UserSearchServiceClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
   options['format'] = 'text';
@@ -59,7 +59,7 @@ proto.ru.miet.example.grpc.chat.service.RegisterServiceClient =
  * @struct
  * @final
  */
-proto.ru.miet.example.grpc.chat.service.RegisterServicePromiseClient =
+proto.ru.miet.example.grpc.chat.service.UserSearchServicePromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
   options['format'] = 'text';
@@ -80,80 +80,80 @@ proto.ru.miet.example.grpc.chat.service.RegisterServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.ru.miet.example.grpc.chat.service.RegisterRequest,
- *   !proto.ru.miet.example.grpc.chat.service.RegisterResponse>}
+ *   !proto.ru.miet.example.grpc.chat.service.UserSearchRequest,
+ *   !proto.ru.miet.example.grpc.chat.service.UserSearchResponse>}
  */
-const methodDescriptor_RegisterService_register = new grpc.web.MethodDescriptor(
-  '/ru.miet.example.grpc.chat.service.RegisterService/register',
+const methodDescriptor_UserSearchService_search = new grpc.web.MethodDescriptor(
+  '/ru.miet.example.grpc.chat.service.UserSearchService/search',
   grpc.web.MethodType.UNARY,
-  proto.ru.miet.example.grpc.chat.service.RegisterRequest,
-  proto.ru.miet.example.grpc.chat.service.RegisterResponse,
+  proto.ru.miet.example.grpc.chat.service.UserSearchRequest,
+  proto.ru.miet.example.grpc.chat.service.UserSearchResponse,
   /**
-   * @param {!proto.ru.miet.example.grpc.chat.service.RegisterRequest} request
+   * @param {!proto.ru.miet.example.grpc.chat.service.UserSearchRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ru.miet.example.grpc.chat.service.RegisterResponse.deserializeBinary
+  proto.ru.miet.example.grpc.chat.service.UserSearchResponse.deserializeBinary
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.ru.miet.example.grpc.chat.service.RegisterRequest,
- *   !proto.ru.miet.example.grpc.chat.service.RegisterResponse>}
+ *   !proto.ru.miet.example.grpc.chat.service.UserSearchRequest,
+ *   !proto.ru.miet.example.grpc.chat.service.UserSearchResponse>}
  */
-const methodInfo_RegisterService_register = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.ru.miet.example.grpc.chat.service.RegisterResponse,
+const methodInfo_UserSearchService_search = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.ru.miet.example.grpc.chat.service.UserSearchResponse,
   /**
-   * @param {!proto.ru.miet.example.grpc.chat.service.RegisterRequest} request
+   * @param {!proto.ru.miet.example.grpc.chat.service.UserSearchRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ru.miet.example.grpc.chat.service.RegisterResponse.deserializeBinary
+  proto.ru.miet.example.grpc.chat.service.UserSearchResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.ru.miet.example.grpc.chat.service.RegisterRequest} request The
+ * @param {!proto.ru.miet.example.grpc.chat.service.UserSearchRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.ru.miet.example.grpc.chat.service.RegisterResponse)}
+ * @param {function(?grpc.web.Error, ?proto.ru.miet.example.grpc.chat.service.UserSearchResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.ru.miet.example.grpc.chat.service.RegisterResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.ru.miet.example.grpc.chat.service.UserSearchResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.ru.miet.example.grpc.chat.service.RegisterServiceClient.prototype.register =
+proto.ru.miet.example.grpc.chat.service.UserSearchServiceClient.prototype.search =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.RegisterService/register',
+      '/ru.miet.example.grpc.chat.service.UserSearchService/search',
       request,
       metadata || {},
-      methodDescriptor_RegisterService_register,
+      methodDescriptor_UserSearchService_search,
       callback);
 };
 
 
 /**
- * @param {!proto.ru.miet.example.grpc.chat.service.RegisterRequest} request The
+ * @param {!proto.ru.miet.example.grpc.chat.service.UserSearchRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.ru.miet.example.grpc.chat.service.RegisterResponse>}
+ * @return {!Promise<!proto.ru.miet.example.grpc.chat.service.UserSearchResponse>}
  *     Promise that resolves to the response
  */
-proto.ru.miet.example.grpc.chat.service.RegisterServicePromiseClient.prototype.register =
+proto.ru.miet.example.grpc.chat.service.UserSearchServicePromiseClient.prototype.search =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/ru.miet.example.grpc.chat.service.RegisterService/register',
+      '/ru.miet.example.grpc.chat.service.UserSearchService/search',
       request,
       metadata || {},
-      methodDescriptor_RegisterService_register);
+      methodDescriptor_UserSearchService_search);
 };
 
 

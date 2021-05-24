@@ -6,7 +6,7 @@
         <chat-list></chat-list>
       </div>
       <div class="right-side">
-        <messages></messages>
+        <messages v-if="activeChatId !== 0"></messages>
       </div>
     </main>
   </div>
@@ -21,6 +21,10 @@
     name: 'chat',
     components: { Messages, AccountInfo, ChatList },
     computed: {
+      activeChatId() {
+        console.log(this.$store.getters.activeChatId)
+        return this.$store.getters.activeChatId
+      },
       isLoggedIn () {
         console.log(this.$store.getters.isLoggedIn);
         return this.$store.getters.isLoggedIn

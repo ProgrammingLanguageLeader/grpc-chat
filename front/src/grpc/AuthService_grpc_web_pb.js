@@ -79,7 +79,7 @@ proto.ru.miet.example.grpc.chat.service.AuthServicePromiseClient =
 
 /**
  * @const
- * @type {!grpc.web.MethodDescriptor
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.ru.miet.example.grpc.chat.service.LoginRequest,
  *   !proto.ru.miet.example.grpc.chat.service.LoginResponse>}
  */

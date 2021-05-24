@@ -472,5 +472,3 @@ proto.ru.miet.example.grpc.chat.service.RegisterResponse.prototype.setStatusdesc
 
 
 goog.object.extend(exports, proto.ru.miet.example.grpc.chat.service);
-
-module.exports = proto.ru.miet.example.grpc.chat.service;

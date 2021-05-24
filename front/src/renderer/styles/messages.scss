@@ -1,7 +1,8 @@
 .messages {
   padding: 5px;
-  height: 100%;
+  height: calc(100vh - 50px);
   transform: rotate(180deg);
+  overflow-y: scroll;
   direction: rtl;
   min-height: calc(100vh - 50px);
   &-wrapper {

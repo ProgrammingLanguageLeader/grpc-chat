@@ -1,39 +1,38 @@
 <template>
   <div class="chats-list">
-    <div class="chat-item" v-on:click='selectChat(item.chatId)' :class="{ 'active' : this.$store.getters.activeChatId === item.chatId }" v-for="item in chats">
+    <div class="chat-item" @click='selectChat(item.getId())' :class="{ 'active' : activeChatId === item.getId() }" v-for="item in chats">
       <div class="group-wrapper">
         <div class="avatar">
-          <img v-if="item.sender.img.length > 0" :src="item.sender.img" alt="avatar">
-          <img v-if="item.sender.img.length === 0" src="~@/assets/default-avatar.png" alt="avatar">
+          <img src="~@/assets/default-avatar.png" alt="avatar">
         </div>
       </div>
       <div class="group-wrapper text-wrapper">
-        <div class="name inline-overflow">{{ item.sender.name }}</div>
-        <div class="last-message inline-overflow">{{ item.message }}</div>
+        <div class="name inline-overflow">{{ item.getLastmessage().getSender().getFirstname() }}</div>
+        <div class="last-message inline-overflow">{{ item.getLastmessage().getText() }}</div>
       </div>
       <div class="group-wrapper info-wrapper">
-        <div class="time">17:50</div>
-        <div class="unreaded-count" v-if="item.unreadedCount > 0">{{ item.unreadedCount }}</div>
+        <div class="time">{{ moment.unix(item.getLastmessage().getCreatedtime().getSeconds()).format("HH:mm") }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
-    data () {
-      return {
-        chats: {}
-      }
+    computed: {
+      ...mapGetters([
+        'activeChatId',
+        'chats'
+      ])
     },
     mounted() {
-      this.$store.dispatch('getChatsList',  (response) => {
-        this.chats = response;
-      })
+      this.$store.dispatch('getChatsList')
     },
     methods: {
       selectChat (chatId) {
-        this.$store.dispatch('setActiveChat', { chatId })
+        this.$store.dispatch('setActiveChat', chatId )
       }
     }
   }

@@ -299,7 +299,8 @@ proto.ru.miet.example.grpc.chat.service.LoginResponse.toObject = function(includ
   var f, obj = {
     statuscode: jspb.Message.getFieldWithDefault(msg, 1, 0),
     statusdescription: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    token: jspb.Message.getFieldWithDefault(msg, 3, "")
+    token: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    user: (f = msg.getUser()) && common_pb.User.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -347,6 +348,11 @@ proto.ru.miet.example.grpc.chat.service.LoginResponse.deserializeBinaryFromReade
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setToken(value);
+      break;
+    case 4:
+      var value = new common_pb.User;
+      reader.readMessage(value,common_pb.User.deserializeBinaryFromReader);
+      msg.setUser(value);
       break;
     default:
       reader.skipField();
@@ -396,6 +402,14 @@ proto.ru.miet.example.grpc.chat.service.LoginResponse.serializeBinaryToWriter = 
     writer.writeString(
       3,
       f
+    );
+  }
+  f = message.getUser();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      common_pb.User.serializeBinaryToWriter
     );
   }
 };
@@ -452,6 +466,43 @@ proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.getToken = funct
  */
 proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.setToken = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional User user = 4;
+ * @return {?proto.ru.miet.example.grpc.chat.service.User}
+ */
+proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.getUser = function() {
+  return /** @type{?proto.ru.miet.example.grpc.chat.service.User} */ (
+    jspb.Message.getWrapperField(this, common_pb.User, 4));
+};
+
+
+/**
+ * @param {?proto.ru.miet.example.grpc.chat.service.User|undefined} value
+ * @return {!proto.ru.miet.example.grpc.chat.service.LoginResponse} returns this
+*/
+proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.setUser = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.ru.miet.example.grpc.chat.service.LoginResponse} returns this
+ */
+proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.clearUser = function() {
+  return this.setUser(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.ru.miet.example.grpc.chat.service.LoginResponse.prototype.hasUser = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

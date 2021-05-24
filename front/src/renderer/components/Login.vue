@@ -31,6 +31,7 @@
 <script>
   export default {
     data () {
+      console.log('messages', this.$store.getters.messages)
       return {
         errors: {},
         username: '',
@@ -43,7 +44,9 @@
         const password = this.password
         this.$store.dispatch('login', { username, password })
           .then(() => {
-            console.log(username)
+            setInterval(() => {
+                this.$store.dispatch('getNewMessages')
+            }, 1000)
             this.$router.push('/')
           })
           .catch(err => {

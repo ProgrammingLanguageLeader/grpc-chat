@@ -16,8 +16,6 @@ const grpc = {};
 grpc.web = require('grpc-web');
 
 
-var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js')
-
 var common_pb = require('./common_pb.js')
 const proto = {};
 proto.ru = {};

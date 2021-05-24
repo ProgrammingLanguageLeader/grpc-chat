@@ -3,13 +3,12 @@
     <div class="account-info">
       <div class="group-wrapper">
         <div class="avatar">
-          <img v-if="img.length > 0" :src="img" alt="avatar">
-          <img v-if="img.length === 0" src="~@/assets/default-avatar.png" alt="avatar">
+          <img src="~@/assets/default-avatar.png" alt="avatar">
         </div>
       </div>
-      <div class="group-wrapper text-wrapper">
-        <div class="name inline-overflow">{{ name }}</div>
-        <div class="login inline-overflow">@{{ login }}</div>
+      <div class="group-wrapper text-wrapper" v-if="!!currentUser && !!currentUser.getFirstname">
+        <div class="name inline-overflow">{{ currentUser.getFirstname() }}</div>
+        <div class="login inline-overflow">@{{ currentUser.getUsername() }}</div>
       </div>
       <div class="group-wrapper configs-wrapper">
         <div class="config-btn">
@@ -29,13 +28,13 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
-    data () {
-      return {
-        name: 'Ed Yelisseyev',
-        login: 'epimetheus84',
-        img: ''
-      }
+    computed: {
+      ...mapGetters([
+        'currentUser'
+      ])
     },
     methods: {
       logout () {

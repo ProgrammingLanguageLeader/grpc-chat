@@ -160,7 +160,8 @@ proto.ru.miet.example.grpc.chat.service.Chat.prototype.toObject = function(opt_i
 proto.ru.miet.example.grpc.chat.service.Chat.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    lastmessage: (f = msg.getLastmessage()) && common_pb.Message.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -205,6 +206,11 @@ proto.ru.miet.example.grpc.chat.service.Chat.deserializeBinaryFromReader = funct
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
+    case 3:
+      var value = new common_pb.Message;
+      reader.readMessage(value,common_pb.Message.deserializeBinaryFromReader);
+      msg.setLastmessage(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -248,6 +254,14 @@ proto.ru.miet.example.grpc.chat.service.Chat.serializeBinaryToWriter = function(
       f
     );
   }
+  f = message.getLastmessage();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      common_pb.Message.serializeBinaryToWriter
+    );
+  }
 };
 
 
@@ -284,6 +298,43 @@ proto.ru.miet.example.grpc.chat.service.Chat.prototype.getName = function() {
  */
 proto.ru.miet.example.grpc.chat.service.Chat.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional Message lastMessage = 3;
+ * @return {?proto.ru.miet.example.grpc.chat.service.Message}
+ */
+proto.ru.miet.example.grpc.chat.service.Chat.prototype.getLastmessage = function() {
+  return /** @type{?proto.ru.miet.example.grpc.chat.service.Message} */ (
+    jspb.Message.getWrapperField(this, common_pb.Message, 3));
+};
+
+
+/**
+ * @param {?proto.ru.miet.example.grpc.chat.service.Message|undefined} value
+ * @return {!proto.ru.miet.example.grpc.chat.service.Chat} returns this
+*/
+proto.ru.miet.example.grpc.chat.service.Chat.prototype.setLastmessage = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.ru.miet.example.grpc.chat.service.Chat} returns this
+ */
+proto.ru.miet.example.grpc.chat.service.Chat.prototype.clearLastmessage = function() {
+  return this.setLastmessage(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.ru.miet.example.grpc.chat.service.Chat.prototype.hasLastmessage = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
